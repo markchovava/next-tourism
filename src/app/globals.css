@@ -2,32 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+
+
+@layer base {
+
+  h6{
+    @apply text-[3rem] font-semibold mb-4;
   }
-}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  h5{
+    @apply text-[2.5rem] font-semibold mb-0;
   }
+
+  .heart__icon{
+    @apply drop-shadow-md text-green-700 cursor-pointer transition-all duration-150 absolute z-40 right-[10%] top-[10%] flex items-center justify-center gap-1;
+  }
+
+  .zoom__inOut{
+      @apply group-hover:scale-110 transition-all duration-300 ease-in-out;
+  }
+
+  .link__one{
+    @apply cursor-pointer hover:text-green-700 transition-all duration-200 hover:drop-shadow-sm;
+  }
+
+  .link__two{
+    @apply cursor-pointer hover:text-green-400 transition-all duration-200 hover:drop-shadow-sm;
+  }
+
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
+    right:10px;
+    padding: 30px;
+    border-radius: 25%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #000 !important;
+    fill: black !important;
+    stroke: black !important;
+}
+
+.swiper-pagination-bullet {
+    background-color: lightgray !important;
+}
+.swiper-pagination-bullet-active {
+    background-color: white !important;
+}
+
+
+/* CARD */
+.card .swiper-pagination-bullet {
+  background-color: darkslategray !important;
+}
+.card .swiper-pagination-bullet-active {
+  background-color: black !important;
+}
+
+.card .swiper-button-next,
+.card .swiper-button-prev {
+    background-color: transparent;
+    right:10px;
+    padding: 30px;
+    border-radius: 0%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #000 !important;
+    fill: black !important;
+    stroke: black !important;
+}
+
+.card__transparent .swiper-button-next,
+.card__transparent .swiper-button-prev {
+    background-color: transparent;
+    right:10px;
+    padding: 30px;
+    border-radius: 0%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: lightgreen !important;
+    fill: lightgreen !important;
+    stroke: lightgreen !important;
+}
+
+
+.card__transparent .swiper-pagination-bullet {
+  background-color: darkgreen !important;
+}
+.card__transparent .swiper-pagination-bullet-active {
+  background-color: lightgreen !important;
+}
+
+
+
+
