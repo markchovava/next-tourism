@@ -13,7 +13,8 @@ import { FaRegHeart, FaHeart } from "react-icons/fa6";
 
 
 
-export default function Carousel4({ title }) {
+export default function Carousel4(props) {
+    const title = props.title;
     const [data, setData] = useState(['a.jpg','b.jpg','c.jpg','d.jpg','e.jpg', 'a.jpg','b.jpg','c.jpg']);
 
   return (

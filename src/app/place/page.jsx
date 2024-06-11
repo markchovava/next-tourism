@@ -1,15 +1,15 @@
 import React from 'react'
 
-import CategoryCarousel from '../components/CategoryCarousel'
 import PlaceList from './components/PlaceList'
+import { getPlaces } from '@/api/getPlaces'
 
-export default function page() {
+export default async function page() {
+  const places = await getPlaces()
   return (
     <div>
        
-       <PlaceList />
+       <PlaceList places={places}/>
        
-       <CategoryCarousel title='Top Categories' />
     </div>
   )
 }

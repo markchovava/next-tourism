@@ -1,24 +1,36 @@
 import MainCarousel from "./components/MainCarousel";
-import Carousel4 from "./components/Carousel4";
-import Grid8 from "./components/Grid8";
 import CategoryCarousel from "./components/CategoryCarousel";
+import { getCategoriesOne, getCategoryPlaces } from "@/api/getCategories";
+import { getCitiesOne } from "@/api/getCities";
+import { getPlacesOne } from "@/api/getPlaces";
+import CarouselRestaurants from "./components/CarouselRestaurants";
+import CarouselHotels from "./components/CarouselHotels";
+import GridPlaces from "./components/GridPlaces";
 
 
 
 
-export default function Home() {
+export default async function Home() {
+   const [citiesOne, categoriesOne, placesOne, hotelPlaces, restaurantPlaces] = await Promise.all([ 
+        getCitiesOne(), 
+        getCategoriesOne(), 
+        getPlacesOne(), 
+        getCategoryPlaces('hotels'),
+        getCategoryPlaces('restaurants'),
+    ]);
+
   return (
    <div>
     {/* CAROUSEL */}
-    <MainCarousel />
+    <MainCarousel citiesOne={citiesOne} />
 
-    <CategoryCarousel title='Top Categories' />
+    <CategoryCarousel title='Top Categories' categoriesOne={categoriesOne} />
 
-    <Grid8 title='Places to be.' />
+    <GridPlaces title='Places to be.' placesOne={placesOne} />
 
-    <Carousel4 title='Hotels'/>
+    <CarouselHotels title='Hotels' slug='hotels' hotelPlaces={hotelPlaces} />
 
-    <Carousel4 title='Things to do.'/>
+    <CarouselRestaurants title='Restaurants' slug='restaurants' restaurantPlaces={restaurantPlaces} />
   </div>
   );
 }

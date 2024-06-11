@@ -8,7 +8,7 @@ import { IoIosSearch } from 'react-icons/io'
 
 
 
-export default function CityView() {
+export default function CityView({id}) {
     const [data, setData] = useState([
         'a.jpg','b.jpg','c.jpg','d.jpg','e.jpg', 
         'a.jpg','b.jpg','c.jpg', ,'c.jpg','d.jpg',

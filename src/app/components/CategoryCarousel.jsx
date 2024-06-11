@@ -9,12 +9,13 @@ import { FaRegStar, FaStar } from "react-icons/fa6";
 import { useState } from 'react';
 import Link from 'next/link';
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
+import { baseURL } from '@/api/baseURL';
 
 
 
 
-export default function CategoryCarousel({ title }) {
-    const [data, setData] = useState([
+export default function CategoryCarousel({ title, categoriesOne }) {
+    /* const [data, setData] = useState([
         {name: 'Hotels', img:'a.jpg'},
         {name: 'Restuarants', img:'b.jpg'},
         {name: 'Banks', img:'c.jpg'},
@@ -23,7 +24,9 @@ export default function CategoryCarousel({ title }) {
         {name: 'Churches', img:'a.jpg'},
         {name: 'Resorts', img:'b.jpg'},
         {name: 'Accommodation', img:'c.jpg'}
-    ]);
+    ]); */
+
+    const [data, setData] = useState(categoriesOne.data)
 
 
   return (
@@ -34,7 +37,7 @@ export default function CategoryCarousel({ title }) {
                     <h6 className="text-[2.5rem] font-semibold ">
                         {title}
                     </h6>
-                    <Link href='#'>
+                    <Link href='/category'>
                         <span className='font-semibold link__one'>View More</span>
                     </Link>
                 </div>
@@ -52,7 +55,7 @@ export default function CategoryCarousel({ title }) {
                     {data.map((i, key) => (
                         <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                             <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                                <img src={`http://localhost:3000/assets/img/${i.img}`} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                                <img src={baseURL + i.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
                                 <span className='heart__icon'>
                                     <FaRegHeart  />
                                     <FaHeart />
@@ -60,7 +63,7 @@ export default function CategoryCarousel({ title }) {
                                 <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                                 </div>
                                 <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                    <Link href='#' className='link__two'>
+                                    <Link href={`/category/${i.slug}`} className='link__two'>
                                         {i.name}
                                     </Link>
                                     

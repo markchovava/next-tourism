@@ -1,16 +1,35 @@
 "use client"
-import React from 'react'
-import { FaRegHeart, FaHeart, FaRegStar, FaStar, FaArrowRightLong } from "react-icons/fa6";
+import { baseURL } from '@/api/baseURL';
+import Link from 'next/link';
+import React, { useState } from 'react'
+import { FaRegHeart, FaHeart, FaRegStar, FaStar, FaArrowRightLong, FaAngleRight } from "react-icons/fa6";
 
 
 
 
-export default function PlaceView() {
+export default function PlaceView({place}) {
+    const [isActive, setIsActive] = useState({image: place.data?.place_images[0]?.image})
+    const [data, setData] = useState(place.data);
+    console.log(place)
+
+
   return (
     <div>
         <section className='w-[100%]'>
+            <div className='mx-auto w-[90%] border-b border-slate-200'>
+                <ul className='flex items-center justify-start gap-2 px-3 py-2'>
+                    <li><Link href='/'>Home</Link></li>
+                    <li><FaAngleRight /></li>
+                    <li><Link href='/place'>Places</Link></li>
+                    <li><FaAngleRight /></li>
+                    <li><Link href={`/place/${data.id}`}>{data?.name}</Link></li>
+                    
+                </ul>
+            </div>
+      </section>
+        <section className='w-[100%]'>
             <div className='w-[90%] mx-auto pt-[2rem] flex items-center justify-between'>
-                <h5>Sheraton Hotel</h5>
+                <h5>{data.name}</h5>
                 <div className='text-xl cursor-pointer text-green-600 flex items-center justify-center gap-1'>
                     <FaRegHeart />
                     <FaHeart />
@@ -21,37 +40,70 @@ export default function PlaceView() {
             {/* IMAGE AREA */}
             <div className='w-[90%] mx-auto grid lg:grid-cols-4 grid-cols-2 gap-4 mb-[2rem]'>
                 <div className='w-[100%] h-[100%] col-span-2 row-span-2 rounded-lg aspect-[10/7] overflow-hidden bg-green-200'>
-                    <img src='http://localhost:3000/assets/img/a.jpg' className='w-[100%] h-[100%] object-cover' />
+                    <img 
+                        src={baseURL + isActive.image } 
+                        className='w-[100%] h-[100%] object-cover transition-all duration-200 ease-in-out' />
                 </div>
                 <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-blue-200 overflow-hidden'>
-                    <img src='http://localhost:3000/assets/img/a.jpg' className='w-[100%] h-[100%] object-cover' />
+                    <img 
+                        onClick={() => setIsActive({image: data.place_images[0].image})}
+                        src={baseURL + data.place_images[0].image} 
+                        className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
                 </div>
                 <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-orange-200 overflow-hidden'>
-                    <img src='http://localhost:3000/assets/img/b.jpg' className='w-[100%] h-[100%] object-cover' />
+                    <img 
+                        onClick={() => setIsActive({image: data.place_images[1].image})}
+                        src={baseURL + data.place_images[1].image} 
+                        className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
                 </div>
                 <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-pink-200 overflow-hidden'>
-                    <img src='http://localhost:3000/assets/img/c.jpg' className='w-[100%] h-[100%] object-cover' />
+                    <img 
+                        onClick={() => setIsActive({image: data.place_images[2].image})}
+                        src={baseURL + data.place_images[2].image} 
+                        className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
                 </div>
-                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-green-200'>
-                    <img src='http://localhost:3000/assets/img/d.jpg' className='w-[100%] h-[100%] object-cover' />
+                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-green-200 overflow-hidden'>
+                    <img 
+                        onClick={() => setIsActive({image: data.place_images[3].image})}
+                        src={baseURL + data.place_images[3].image} 
+                        className='w-[100%] h-[100%] object-cover hover:scale-110 transition-all duration-200 ease-in-out' />
                 </div>
             </div>
             {/* DEscription */}
             <div className='mx-auto w-[80%] mb-[2rem]'>
                 <p className='text-xl mb-[1rem]'>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum perferendis, 
-                    beatae impedit deleniti quisquam incidunt neque, aspernatur omnis, itaque 
-                    dolore maiores labore! Ipsa, ex rerum culpa cupiditate, vero beatae quis 
-                    totam eius voluptatem voluptas maxime, vel ad voluptatibus sequi nemo neque 
-                    reiciendis nam. Amet eos recusandae ratione delectus quis eaque.
+                    {data.description}
                 </p>
-                <p className='text-xl mb-[1rem]'>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum perferendis, 
-                    beatae impedit deleniti quisquam incidunt neque, aspernatur omnis, itaque 
-                    dolore maiores labore! Ipsa, ex rerum culpa cupiditate, vero beatae quis 
-                    totam eius voluptatem voluptas maxime, vel ad voluptatibus sequi nemo neque 
-                    reiciendis nam. Amet eos recusandae ratione delectus quis eaque.
-                </p>
+                <div className=' mb-[1rem] flex items-center justify-between gap-6'>
+                    <div>
+                        <div className='flex items-center justify-start gap-3 mb-2'>
+                            <div>Address:</div>
+                            <div className='font-semibold'>{data.address}</div>
+                        </div>
+                        <div className='flex items-center justify-start gap-3 mb-2'>
+                            <div>Phone:</div>
+                            <div className='font-semibold'>{data.phone}</div>
+                        </div>
+                        <div className='flex items-center justify-start gap-3 mb-2'>
+                            <div>Email:</div>
+                            <div className='font-semibold'>{data.email}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div className='flex items-center justify-start gap-3 mb-2'>
+                            <div>Website:</div>
+                            <div className='font-semibold'>{data.website}</div>
+                        </div>
+                        <div className='flex items-center justify-start gap-3 mb-2'>
+                            <div>City:</div>
+                            <div className='font-semibold'>{data.city?.name}</div>
+                        </div>
+                        <div className='flex items-center justify-start gap-3 mb-2'>
+                            <div>Province:</div>
+                            <div className='font-semibold'>{data.province?.name}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             {/*  */}
             <div className='mx-auto w-[80%]'>

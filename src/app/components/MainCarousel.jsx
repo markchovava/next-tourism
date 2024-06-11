@@ -9,11 +9,13 @@ import { BsArrowRight } from 'react-icons/bs'
 import { GrPrevious, GrNext } from 'react-icons/gr';
 import { FaRegHeart } from "react-icons/fa6";
 import { useState } from 'react';
+import { baseURL } from '@/api/baseURL';
+import Link from 'next/link';
 
 
 
-export default function MainCarousel() {
-  const [data, setData] = useState([
+export default function MainCarousel({ citiesOne }) {
+  /* const [data, setData] = useState([
     {city: 'Harare', img:'a.jpg'},
     {city: 'Bulawayo', img:'b.jpg'},
     {city: 'Mutare', img:'c.jpg'},
@@ -22,7 +24,10 @@ export default function MainCarousel() {
     {city: 'Plumtree', img:'a.jpg'},
     {city: 'Inyanga', img:'b.jpg'},
     {city: 'Bindura', img:'c.jpg'},
-]);
+  ]); */
+  const [data, setData] = useState(citiesOne.data)
+
+
 
 
   return (
@@ -44,17 +49,14 @@ export default function MainCarousel() {
             {data.map((i, key) => (
             <SwiperSlide key={key} className='h-[60vh] aspect-[10/7] overflow-hidden hover:drop-shadow-md'>
                 <div className='group w-[100%] h-[100%] relative'>
-                  <img src={`./assets/img/${i.img}`} className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
+                  <img src={baseURL + i.image} className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
                   <div className='absolute z-30 w-[100%] h-[50%] bottom-0 left-0 bg-gradient-to-b from-transparent to-black opacity-75 group-hover:opacity-25 transition-all ease-in-out duration-200'>
                   </div>
                   <div className='absolute z-40 bottom-0 left-0 p-8 text-white drop-shadow-md'>
-                    <h6 className='text-3xl font-bold mb-2'>{i.city}</h6>
-                   {/*  <p className='text-lg mb-2'>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, cumque.
-                    </p> */}
-                    <button className='px-4 py-3 rounded-full border border-slate-50 hover:bg-gradient-to-br hover:from-green-400 group-hover:to-blue-500'>
+                    <h6 className='text-3xl font-bold pb-2'>{i.name}</h6>
+                    <Link href={`/city/${i.id}`} className='px-4 py-3 rounded-full border border-slate-50 transition-all duration-200 hover:bg-gradient-to-br hover:from-green-600 group-hover:to-blue-700'>
                       Click for more
-                    </button>
+                    </Link>
                   </div>
                 </div>
             </SwiperSlide>      
@@ -79,17 +81,16 @@ export default function MainCarousel() {
             {data.map((i, key) => (
             <SwiperSlide key={key} className='h-[60vh] aspect-[10/7] overflow-hidden hover:drop-shadow-md'>
                 <div className='group w-[100%] h-[100%] relative'>
-                  <img src={`./assets/img/${i.img}`} className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
+                  <img src={baseURL + i.image} className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
                   <div className='absolute z-30 w-[100%] h-[50%] bottom-0 left-0 bg-gradient-to-b from-transparent to-black opacity-75 group-hover:opacity-25 transition-all ease-in-out duration-200'>
                   </div>
                   <div className='absolute z-40 bottom-0 left-0 p-8 text-white drop-shadow-md'>
-                    <h6 className='text-3xl font-bold mb-2'>{i.city}</h6>
-                   {/*  <p className='text-lg mb-2'>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, cumque.
-                    </p> */}
-                    <button className='px-4 py-3 rounded-full border border-slate-50 hover:bg-gradient-to-br hover:from-green-400 group-hover:to-blue-500'>
+                    <h6 className='text-3xl font-bold pb-2'>{i.name}</h6>
+                    <Link
+                      href={`/city/${i.id}`} 
+                      className='px-4 py-3 rounded-full border border-slate-50 transition-all duration-200 hover:bg-gradient-to-br hover:from-green-600 group-hover:to-blue-700'>
                       Click for more
-                    </button>
+                    </Link>
                   </div>
                 </div>
             </SwiperSlide>      

@@ -1,10 +1,10 @@
 import React from 'react'
 import CityView from './components/CityView'
 
-export default function page() {
+export default async function page({params: {id} }) {
   return (
     <div>
-        <CityView />
+        <CityView id={id}  />
     </div>
   )
 }

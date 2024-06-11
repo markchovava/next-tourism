@@ -1,5 +1,4 @@
 "use client";
-import CategoryCarousel from '@/app/components/CategoryCarousel';
 import Link from 'next/link';
 import React, { useState } from 'react'
 import { FaRegStar, FaStar } from "react-icons/fa6";
@@ -93,7 +92,7 @@ export default function CityList() {
 
         </section>
 
-        <CategoryCarousel title='Top Categories' />
+       
 
     </div>
   )

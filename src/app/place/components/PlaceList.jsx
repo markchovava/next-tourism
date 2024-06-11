@@ -1,4 +1,6 @@
 "use client";
+import { baseURL } from '@/api/baseURL';
+import axios from 'axios';
 import Link from 'next/link';
 import React, { useState } from 'react'
 import { FaRegStar, FaStar } from "react-icons/fa6";
@@ -7,12 +9,31 @@ import { IoIosSearch } from 'react-icons/io'
 
 
 
-export default function PlaceList() {
-    const [data, setData] = useState([
-        'a.jpg','b.jpg','c.jpg','d.jpg','e.jpg', 
-        'a.jpg','b.jpg','c.jpg', ,'c.jpg','d.jpg',
-        'e.jpg', 'a.jpg'
-    ]);
+export default function PlaceList({places}) {
+    const [data, setData] = useState(places.data);
+    const [search, setSearch] = useState({});
+    const [isSearch, setIsSearch] = useState(false);
+    /* PAGINATION */
+    const [nextURL, setNextURL] = useState(places.links.next)
+    const [prevURL, setPrevURL] = useState(places.links.prev)
+    const config = {
+        headers: {
+        'Content-Type': 'application/json',
+    }};
+    /* PAGINATION DATA */
+    async function paginationHandler(url) {
+        try{
+        const result = await axios.get(url, config)
+        .then((response) => {
+            setData(response.data.data)
+            setPrevURL(response.data.links.prev)
+            setNextURL(response.data.links.next)
+        })
+        } catch (error) {
+        console.error(`Error: ${error}`)
+        }     
+    }
+
 
     return (
     <>
@@ -46,15 +67,21 @@ export default function PlaceList() {
                     </h6>
                     {/* PAGINATION */}
                     <div className='flex items-center justify-end gap-3'>
-                        <button
-                            className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
-                            <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-600' /> 
-                            Prev 
-                        </button>
-                        <button 
-                            className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
-                            Next <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out text-green-600' />
-                        </button>
+                        { prevURL && 
+                            <button
+                                onClick={() => paginationHandler(prevURL)}
+                                className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
+                                <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-600' /> 
+                                Prev 
+                            </button>
+                        }
+                        { nextURL && 
+                            <button 
+                                onClick={() => paginationHandler(nextURL)}
+                                className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
+                                Next <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out text-green-600' />
+                            </button>
+                        }
                     </div>
                     
                 </div>
@@ -64,16 +91,16 @@ export default function PlaceList() {
                     {data.map((i, key) => (
                         <div key={key} className='group'>
                             <div className='relative w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-2'>
-                                <img src={`./assets/img/${i}`} className='w-[100%] h-[100%] object-cover zoom__inOut' />
+                                <img src={baseURL + i.place_images[0].image  } className='w-[100%] h-[100%] object-cover zoom__inOut' />
                                 <span className='heart__icon'>
                                     <FaRegHeart  />
                                     <FaHeart />
                                 </span>
                             </div>
                                 <div className='pb-2 px-4'>
-                                    <Link href='#'>
+                                    <Link href={`/place/${i.id}`}>
                                         <p className='mb-2 font-semibold link__one'>
-                                            Lorem ipsum dolor sit. 
+                                            {i.name} 
                                         </p>
                                     </Link>
                                     <p className='mb-2 flex items-center justify-start gap-2'>
@@ -83,7 +110,7 @@ export default function PlaceList() {
                                         <FaStar />
                                         <FaRegStar />
                                     </p>
-                                    <p>Harare</p>
+                                    <p>{i.city?.name}</p>
                                 </div>
                         </div>
 
@@ -91,15 +118,21 @@ export default function PlaceList() {
                 </div>
                 {/* PAGINATION */}
                 <div className='flex items-center justify-end gap-3'>
-                        <button
-                            className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
-                            <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-600' /> 
-                            Prev 
-                        </button>
-                        <button 
-                            className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
-                            Next <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out text-green-600' />
-                        </button>
+                        { prevURL && 
+                            <button
+                                onClick={() => paginationHandler(prevURL)}
+                                className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
+                                <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-600' /> 
+                                Prev 
+                            </button>
+                        }
+                        { nextURL && 
+                            <button 
+                                onClick={() => paginationHandler(nextURL)}
+                                className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
+                                Next <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out text-green-600' />
+                            </button>
+                        }
                     </div>
             </div>
 
