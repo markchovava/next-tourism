@@ -144,6 +144,7 @@ export default function CategoryList({ categories }) {
                     
                 </div>
                 {/* DATA */}
+                {data.length > 0 ? 
                 <div className='grid lg:grid-cols-4 grid-cols-2 gap-8 mb-8'>
                     {/* COL */}
                     {data.map((i, key) => (
@@ -164,6 +165,11 @@ export default function CategoryList({ categories }) {
                         </div>
                     ))}
                 </div>
+                :
+                <div className='w-[100%] text-center mt-[1.2rem] mb-[1.5rem] font-light text-[2.5rem]'>
+                    Data not found.
+                </div>
+                }
                 {/* PAGINATION */}
                 <div className='flex items-center justify-end gap-3'>
                     { prevURL && 

@@ -48,8 +48,6 @@ export default function CategoryPlaceList({category, places, cities, slug }) {
     }  
     /* SEARCH DATA */
     async function searchData() {
-        console.log('Tets')
-        console.log(search)
         const formData = {
             name: search.name,
             city_id: search.city_id ? search.city_id : '',

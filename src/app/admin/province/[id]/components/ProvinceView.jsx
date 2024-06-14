@@ -1,5 +1,6 @@
 "use client";
 import axiosClientAPI from '@/api/axiosClientAPI';
+import { baseURL } from '@/api/baseURL';
 import Loader from '@/app/components/Loader';
 import { tokenAuth } from '@/tokens/tokenAuth';
 import React, { useEffect, useState } from 'react'
@@ -42,6 +43,18 @@ export default function ProvinceView({ id }) {
   return (
     <section className='w-[100%]'>
         <div className='mx-auto w-[90%] pb-[4rem]'>
+          {/*  */}
+          {data?.image &&
+          <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
+            <div className='w-[20%] font-semibold'>Image:</div>
+            <div className='w-[80%]'>
+              <div className='w-[40%] aspect-[5/3] rounded-xl overflow-hidden'>
+                <img src={baseURL + data?.image} className='w-[100%] h-[100%] object-cover' />
+              </div>
+            </div>
+          </div>
+          }
+          {/*  */}
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%] font-semibold'>Name:</div>
             <div className='w-[80%]'>{data?.name}</div>

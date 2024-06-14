@@ -14,18 +14,8 @@ import Link from 'next/link';
 
 
 
-export default function MainCarousel({ citiesOne }) {
-  /* const [data, setData] = useState([
-    {city: 'Harare', img:'a.jpg'},
-    {city: 'Bulawayo', img:'b.jpg'},
-    {city: 'Mutare', img:'c.jpg'},
-    {city: 'Hwange', img:'d.jpg'},
-    {city: 'Chitungwiza', img:'e.jpg'},
-    {city: 'Plumtree', img:'a.jpg'},
-    {city: 'Inyanga', img:'b.jpg'},
-    {city: 'Bindura', img:'c.jpg'},
-  ]); */
-  const [data, setData] = useState(citiesOne.data)
+export default function MainCarousel({ provinces }) {
+  const [data, setData] = useState(provinces.data)
 
 
 
@@ -54,7 +44,7 @@ export default function MainCarousel({ citiesOne }) {
                   </div>
                   <div className='absolute z-40 bottom-0 left-0 p-8 text-white drop-shadow-md'>
                     <h6 className='text-3xl font-bold pb-2'>{i.name}</h6>
-                    <Link href={`/city/${i.id}`} className='px-4 py-3 rounded-full border border-slate-50 transition-all duration-200 hover:bg-gradient-to-br hover:from-green-600 group-hover:to-blue-700'>
+                    <Link href={`/province/${i.slug}`} className='px-4 py-3 rounded-full border border-slate-50 transition-all duration-200 hover:bg-gradient-to-br hover:from-green-600 group-hover:to-blue-700'>
                       Click for more
                     </Link>
                   </div>
@@ -87,7 +77,7 @@ export default function MainCarousel({ citiesOne }) {
                   <div className='absolute z-40 bottom-0 left-0 p-8 text-white drop-shadow-md'>
                     <h6 className='text-3xl font-bold pb-2'>{i.name}</h6>
                     <Link
-                      href={`/city/${i.id}`} 
+                      href={`/province/${i.slug}`} 
                       className='px-4 py-3 rounded-full border border-slate-50 transition-all duration-200 hover:bg-gradient-to-br hover:from-green-600 group-hover:to-blue-700'>
                       Click for more
                     </Link>

@@ -10,11 +10,12 @@ import { toast, Bounce } from "react-toastify";
 export default function ProvinceAdd() {
   const router = useRouter();
     const [data, setData] = useState();
+    const [image, setImage] = useState();
     const [isSubmit, setIsSubmit] = useState(false);
     const { getAuthToken } = tokenAuth();
     const config = {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${getAuthToken()}`
     }};
     const handleInput = (e) => {
@@ -25,9 +26,11 @@ export default function ProvinceAdd() {
       const formData = {
         name: data?.name,
         slug: data?.slug,
+        image: data?.image,
         priority: data?.priority,
     }
-        try{
+    console.log(formData)
+    try{
             const result = await axiosClientAPI.post(`province`, formData, config)
             .then((response) => {
               toast.success(response.data.message, {
@@ -61,6 +64,22 @@ export default function ProvinceAdd() {
   return (
     <section className='w-[100%]'>
           <div className='mx-auto w-[90%]'>
+              {/*  */}
+              <div className='mb-6'>
+                  <p className='font-semibold mb-2'>Image:</p>
+                  <input type='file'
+                    name="image"
+                    onChange={(e) => {
+                      setImage(URL.createObjectURL(e.target.files[0]))
+                      setData({...data, image: e.target.files[0]})
+                    }}
+                    placeholder="Enter name here..."
+                    className='w-[40%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
+                  <div className="w-[30%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
+                    <img src={image} className="w-[100%] h-[100%] object-cover" />
+                  </div>
+              </div>
+              {/*  */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Name</p>
                   <input type='text'
@@ -92,6 +111,7 @@ export default function ProvinceAdd() {
                       <option value={12}>12</option>
                   </select>
               </div>
+              {/*  */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Slug:</p>
                   <input type='text'

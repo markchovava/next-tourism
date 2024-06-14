@@ -1,5 +1,6 @@
 "use client";
 import axiosClientAPI from "@/api/axiosClientAPI";
+import { baseURL } from "@/api/baseURL";
 import Loader from "@/app/components/Loader";
 import { tokenAuth } from "@/tokens/tokenAuth";
 import { useRouter } from "next/navigation";
@@ -12,11 +13,12 @@ import { toast, Bounce } from 'react-toastify';
 export default function ProvinceEdit({ id }) {
     const router = useRouter();
     const [data, setData] = useState();
+    const [image, setImage] = useState();
     const [isSubmit, setIsSubmit] = useState(false);
     const { getAuthToken } = tokenAuth();
     const config = {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${getAuthToken()}`
     }};
 
@@ -29,8 +31,9 @@ export default function ProvinceEdit({ id }) {
       try{
         const result = await axiosClientAPI.get(`province/${id}`, config)
         .then((response) => {
-          console.log(response.data.data)
           setData(response.data.data)
+          setImage(baseURL + response.data?.data?.image)
+          console.log(baseURL + response.data?.data?.image)
         })
       } catch (error) {
         console.error(`Error: ${error}`)
@@ -41,6 +44,7 @@ export default function ProvinceEdit({ id }) {
       const formData = {
           name: data?.name,
           slug: data?.slug,
+          image: data.image,
           priority: data?.priority,
       }
       try{
@@ -89,6 +93,20 @@ export default function ProvinceEdit({ id }) {
     return (
       <section className='w-[100%]'>
           <div className='mx-auto w-[90%]'>
+              {/*  */}
+              <div className='mb-6'>
+                  <p className='font-semibold mb-2'>Image:</p>
+                  <input type='file'
+                    name="image"
+                    onChange={(e) => {
+                      setImage(URL.createObjectURL(e.target.files[0]))
+                      setData({...data, image: e.target.files[0]})
+                    }}
+                    className='w-[40%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
+                  <div className="w-[30%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
+                    <img src={image} className="w-[100%] h-[100%] object-cover" />
+                  </div>
+              </div>
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Name</p>
                   <input 
