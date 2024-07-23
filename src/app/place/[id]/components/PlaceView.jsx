@@ -1,17 +1,113 @@
 "use client"
 import { baseURL } from '@/api/baseURL';
 import Link from 'next/link';
-import React, { useState } from 'react'
-import { FaRegHeart, FaHeart, FaRegStar, FaStar, FaArrowRightLong, FaAngleRight } from "react-icons/fa6";
+import React, { useEffect, useState } from 'react'
+import { FaRegHeart, FaHeart, FaRegStar, FaStar, FaArrowRightLong, FaAngleRight, FaArrowLeftLong } from "react-icons/fa6";
+import { IoMdContact } from 'react-icons/io';
+import { MdDateRange } from 'react-icons/md';
+import StarRating from './StarRating';
+import axios from 'axios';
+import { darkBounce } from '@/utils/roastifyDark';
+import { toast } from 'react-toastify';
 
 
 
 
-export default function PlaceView({place}) {
-    const [isActive, setIsActive] = useState({image: place.data?.place_images[0]?.image})
-    const [data, setData] = useState(place.data);
-    console.log(place)
+export default function PlaceView({placeData, reviewsData}) {
+    const [isActive, setIsActive] = useState({image: placeData?.data?.place_images[0]?.image})
+    const [data, setData] = useState(placeData?.data);
+    const [reviews, setReviews] = useState(reviewsData?.data);
+    const [inputData, setInputData] = useState({})
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [rating, setRating] = useState(null);
+     /* PAGINATION */
+     const [nextURL, setNextURL] = useState(reviewsData?.links?.next)
+     const [prevURL, setPrevURL] = useState(reviewsData?.links?.prev)
+    const handleInput = (e) => {
+        setInputData({...data, [e.target.name]: e.target.value})
+    }
 
+    /* PAGINATION DATA */
+    async function paginationHandler(url) {
+        try{
+        const result = await axios.get(url)
+        .then((response) => {
+            setReviews(response.data.data)
+            setPrevURL(response.data.links.prev)
+            setNextURL(response.data.links.next)
+        })
+        } catch (error) {
+            console.error(`Error: ${error}`);
+            console.error(`Error Message: ${error.message}`);
+            console.error(`Error Response: ${error.response}`);
+        }     
+    }
+
+    async function postData(){
+        const formData = {
+            email: inputData.email,
+            rating: rating,
+            message: inputData.message,
+            place_id: data.id
+        }
+        try{
+            const result = await axios.post(`${baseURL}review`, formData)
+            .then((response) => {
+              if(response.data.status == 1){
+                toast.success(response.data.message, darkBounce);
+                setInputData({
+                    email: '',
+                    message: '',
+                });
+                setRating(null);
+                getData();
+                setIsSubmit(false);
+              }
+              }
+            );    
+            } catch (error) {
+                console.error(`Error: ${error}`);
+                console.error(`Error Message: ${error.message}`);
+                console.error(`Error Response: ${error.response}`);
+                setIsSubmit(false);
+            }
+  
+    } 
+    /* GET DATA */
+    async function getData() {
+        try{
+        const result = await axios.get(`${baseURL}review-by-place-id/${data.id}`)
+        .then((response) => {
+            console.log(response.data?.data)
+            setReviews(response.data?.data)
+            setNextURL(response.data.links.next)
+            setPrevURL(response.data.links.prev)
+        })
+        } catch (error) {
+        console.error(`Error: ${error}`)
+        }   
+    }  
+    /*  */
+    async function deleteReview(id) {
+        try{
+        const result = await axios.delete(`${baseURL}review/${id}`)
+        .then((response) => {
+            if(response.data.status == 1){
+                toast.success(response.data.message, darkBounce)
+                getData();
+
+            }
+        })
+        } catch (error) {
+        console.error(`Error: ${error}`)
+        }   
+    }  
+
+    useEffect(() => {
+        isSubmit === true && postData();
+    },[isSubmit])
+
+    
 
   return (
     <div>
@@ -26,14 +122,11 @@ export default function PlaceView({place}) {
                     
                 </ul>
             </div>
-      </section>
+        </section>
         <section className='w-[100%]'>
             <div className='w-[90%] mx-auto pt-[2rem] flex items-center justify-between'>
-                <h5>{data.name}</h5>
-                <div className='text-xl cursor-pointer text-green-600 flex items-center justify-center gap-1'>
-                    <FaRegHeart />
-                    <FaHeart />
-                </div>
+                <h5 className='mb-2'>{data.name}</h5>
+               
             </div>
         </section>
         <section className='w-[100%] mb-[5rem]'>
@@ -69,41 +162,59 @@ export default function PlaceView({place}) {
                         className='w-[100%] h-[100%] object-cover hover:scale-110 transition-all duration-200 ease-in-out' />
                 </div>
             </div>
-            {/* DEscription */}
-            <div className='mx-auto w-[80%] mb-[2rem]'>
-                <p className='text-xl mb-[1rem]'>
+            {/* DESCRIPTION */}
+            <div className='mx-auto w-[80%] mb-[2rem] text-xl'>
+                <p className=' mb-[1rem]'>
                     {data.description}
                 </p>
-                <div className=' mb-[1rem] flex items-center justify-between gap-6'>
-                    <div>
-                        <div className='flex items-center justify-start gap-3 mb-2'>
-                            <div>Address:</div>
-                            <div className='font-semibold'>{data.address}</div>
+
+                {/*  */}
+                <div className="mx-auto w-[100%] grid lg:grid-cols-2 grid-cols-1 gap-8">
+                    {/*  */}
+                    <div className="w-[100%] flex items-start justify-start  py-3">
+                        <div className="w-[20%] flex items-center justify-center">
+                            <IoMdContact className="text-[4rem] text-slate-600" />
                         </div>
-                        <div className='flex items-center justify-start gap-3 mb-2'>
-                            <div>Phone:</div>
-                            <div className='font-semibold'>{data.phone}</div>
-                        </div>
-                        <div className='flex items-center justify-start gap-3 mb-2'>
-                            <div>Email:</div>
-                            <div className='font-semibold'>{data.email}</div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className='flex items-center justify-start gap-3 mb-2'>
-                            <div>Website:</div>
-                            <div className='font-semibold'>{data.website}</div>
-                        </div>
-                        <div className='flex items-center justify-start gap-3 mb-2'>
-                            <div>City:</div>
-                            <div className='font-semibold'>{data.city?.name}</div>
-                        </div>
-                        <div className='flex items-center justify-start gap-3 mb-2'>
-                            <div>Province:</div>
-                            <div className='font-semibold'>{data.province?.name}</div>
+                        <div className="border-l border-slate-200 px-6 text-xl font-light">
+                            <p className="mb-3 flex items-center gap-4">
+                                Address:
+                                <span className="text-slate-700 font-normal">{data.address}</span>
+                            </p>
+                            <p className="mb-3 flex items-center gap-4">
+                                City:
+                                <span className="text-slate-700 font-normal">{data?.city?.name}</span>
+                            </p>
+                            <p className="mb-3 flex items-center gap-4">
+                                Province:
+                                <span className="text-slate-700 font-normal">{data.province?.name}</span>
+                            </p>
+                        
                         </div>
                     </div>
+                    {/*  */}
+                    <div className="w-[100%] flex items-start justify-start  py-3">
+                        <div className="w-[20%] flex items-center justify-center">
+                            <MdDateRange className="text-[4rem] text-slate-600" />
+                        </div>
+                        <div className="border-l border-slate-200 px-6 text-xl font-light">
+                            <p className="mb-3 flex items-center gap-4">
+                                Phone:
+                                <span className="text-slate-700 font-normal">{data.phone}</span>
+                            </p>
+                            <p className="mb-3 flex items-center gap-4">
+                                Email:
+                                <span className="text-slate-700 font-normal">{data.email}</span>
+                            </p>
+                            <p className="mb-3 flex items-center gap-4">
+                                Website:
+                                <span className="text-slate-700 font-normal">{data.website}</span>
+                            </p>
+                           
+                        </div>
+                    </div> 
                 </div>
+
+
             </div>
             {/*  */}
             <div className='mx-auto w-[80%]'>
@@ -112,110 +223,96 @@ export default function PlaceView({place}) {
                 <div className='mb-4'>
                     <div className='font-semibold mb-1'>Email:</div>
                     <input 
-                    type='text' 
-                    placeholder='Enter Email here...'
-                    className='outline-none border border-slate-300 px-5 py-4 rounded-xl w-[100%]' />
+                        type='text' 
+                        name='email'
+                        onChange={handleInput}
+                        placeholder='Enter Email here...'
+                        className='outline-none border border-slate-300 px-5 py-4 rounded-xl w-[100%]' />
                 </div>
                 {/* REVIEW */}
                 <div className='mb-4'>
-                    <div className='font-semibold mb-1'>Review out of 5:</div>
-                    <p className='text-xl cursor-pointer mb-2 flex items-center justify-start gap-3'>
-                        <FaRegStar />
-                        <FaRegStar />
-                        <FaRegStar />
-                        <FaRegStar />
-                        <FaRegStar />
-                    </p>
+                    <div className='font-semibold mb-1'>Rate out of 5:</div>
+                    <StarRating rating={rating} setRating={setRating} />
                 </div>
                 {/* TEXT AREA */}
                 <div className='mb-4'>
                     <div className='font-semibold mb-1'>Review:</div>
                     <textarea  
-                    placeholder='Write your Review here...'
-                    className='outline-none border border-slate-300 h-[10rem] px-5 py-4 rounded-xl w-[100%]'></textarea>
+                        name='message'
+                        onChange={handleInput}
+                        placeholder='Write your Review here...'
+                        className='outline-none border border-slate-300 h-[10rem] px-5 py-4 rounded-xl w-[100%]'></textarea>
                 </div>
                 {/* BUTTON */}
                 <div className='w-[100%] flex items-center justify-center mb-4'>
-                    <button className='flex items-center justify-center gap-3 group text-white duration-200 transition-all ease-in-out text-lg rounded-full px-5 py-6 w-[20rem] bg-gradient-to-br from-green-600 to-cyan-700 hover:bg-gradient-to-br hover:from-cyan-700 hover:to-green-600'>
-                        Submit <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
+                    <button 
+                        onClick={() => setIsSubmit(true)}
+                        className='flex items-center justify-center gap-3 group text-white duration-200 transition-all ease-in-out text-lg rounded-full px-5 py-6 w-[20rem] bg-gradient-to-br from-green-600 to-cyan-700 hover:bg-gradient-to-br hover:from-cyan-700 hover:to-green-600'>
+                        {isSubmit === true ? 'Processing' : 
+                        <>
+                            Submit <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
+                        </>
+                        }
                     </button>
                 </div>
             </div>
 
             {/*  */}
-            <div className='mx-auto w-[80%]'>
+            <div className='mx-auto w-[80%] py-[1rem]'>
                 {/* COMMENT */}
-                <section className='flex items-center justify-start gap-8 border-b border-slate-300'>
-                    <div className=' py-[2rem]'>
-                        <div className='w-[10rem] aspect-square rounded-full overflow-hidden bg-green-400'>
-                            <img src='http://localhost:3000/assets/img/a.jpg' className='w-[100%] h-[100%] object-cover' />
-                        </div>
-                    </div>
-                    <div className=''>
-                        <div className='text-xl cursor-pointer mb-3 flex items-center justify-start gap-3'>
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                        </div>
-                        <p className='w-[90%] mb-2'>
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus molestiae 
-                            vitae earum sit sint. Quis deserunt molestiae sit possimus a!
-                        </p>
-                        <div className='italic text-lg'>
-                            mark@email.com
-                        </div>
-                    </div>
+                <section className=''>
+                    {reviews.length > 0 &&
+                        reviews.map((i, key) => (
+                            <div className='mx-auto w-[90%] py-[1.6rem] border-b border-slate-300'>
+                                <div className='text-xl cursor-pointer mb-3 flex items-center justify-start gap-3'>
+                                    {[...Array(5)].map((a, key) => {
+                                        const currentIndex = key + 1;
+                                        return (
+                                            <>
+                                                { currentIndex <= i.rating 
+                                                    ? <FaStar className='text-slate-600' />
+                                                    : <FaRegStar className='text-slate-600' />
+                                                } 
+                                            </>
+                                        )
+                                    })}
+                    
+                                </div>
+                                <p className=' mb-2'>
+                                    {i.message}
+                                </p>
+                                <div className='italic text-lg flex items-center justify-between gap-3'>
+                                    <p>{i.email}</p>
+                                    <button 
+                                        onClick={() => deleteReview(i.id)} 
+                                        className='text-sm text-red-600 hover:text-slate-600 underline hover:no-underline'>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    }
+
                 </section>
-                {/* COMMENT */}
-                <section className='flex items-center justify-start gap-8 border-b border-slate-300'>
-                    <div className=' py-[2rem]'>
-                        <div className='w-[10rem] aspect-square rounded-full overflow-hidden bg-green-400'>
-                            <img src='http://localhost:3000/assets/img/b.jpg' className='w-[100%] h-[100%] object-cover' />
-                        </div>
-                    </div>
-                    <div className=''>
-                        <div className='text-xl cursor-pointer mb-3 flex items-center justify-start gap-3'>
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                        </div>
-                        <p className='w-[90%] mb-2'>
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus molestiae 
-                            vitae earum sit sint. Quis deserunt molestiae sit possimus a!
-                        </p>
-                        <div className='italic text-lg'>
-                            mark@email.com
-                        </div>
-                    </div>
-                </section>
-                {/* COMMENT */}
-                <section className='flex items-center justify-start gap-8 border-b border-slate-300'>
-                    <div className=' py-[2rem]'>
-                        <div className='w-[10rem] aspect-square rounded-full overflow-hidden bg-green-400'>
-                            <img src='http://localhost:3000/assets/img/c.jpg' className='w-[100%] h-[100%] object-cover' />
-                        </div>
-                    </div>
-                    <div className=''>
-                        <div className='text-xl cursor-pointer mb-3 flex items-center justify-start gap-3'>
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                            <FaRegStar />
-                        </div>
-                        <p className='w-[90%] mb-2'>
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus molestiae 
-                            vitae earum sit sint. Quis deserunt molestiae sit possimus a!
-                        </p>
-                        <div className='italic text-lg'>
-                            mark@email.com
-                        </div>
-                    </div>
-                </section>
+
+                {/* PAGINATION */}
+                <div className='flex items-center justify-end gap-3 py-[2rem]'>
+                {prevURL && 
+                    <button 
+                    onClick={() => paginationHandler(prevURL)}
+                    className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-blue-600'>
+                    <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-700' /> 
+                        Prev </button>
+                }
+                {nextURL && 
+                    <button
+                    onClick={() => paginationHandler(nextURL)}
+                    className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-blue-600'>
+                        Next <FaArrowRightLong className='text-green-700 group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
+                    </button>
+                }
+                </div>
+                
                
             </div>
 

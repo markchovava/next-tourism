@@ -14,8 +14,8 @@ import { baseURL } from '@/api/baseURL';
 
 
 
-export default function CarouselCity({ title, citiesOne }) {
-    const [data, setData] = useState(citiesOne.data)
+export default function CarouselCity({ title, dbData }) {
+    const [data, setData] = useState(dbData.data)
 
     return (
         <section className='w-[100%]'>

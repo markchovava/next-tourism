@@ -6,6 +6,7 @@ import { FaRegPlusSquare, FaSearch } from "react-icons/fa";
 import { CgRemoveR } from "react-icons/cg";
 import Loader from '@/app/components/Loader';
 import { Bounce, toast } from 'react-toastify';
+import { redirect } from 'next/navigation';
 
 
 
@@ -16,7 +17,10 @@ export default function PlaceCategoryEdit({ id }) {
     const [categories, setCategories] = useState()
     const [placeCategories, setPlaceCategories] = useState()
     const [errMsg, setErrMsg] = useState({});
-    const { getAuthToken } = tokenAuth()
+    const { getAuthToken } = tokenAuth();
+    if(!getAuthToken()) { 
+        redirect('/login');
+      }
     const config = {
         headers: {
           'Content-Type': 'application/json',

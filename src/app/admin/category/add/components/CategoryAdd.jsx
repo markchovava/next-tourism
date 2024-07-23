@@ -2,7 +2,7 @@
 
 import axiosClientAPI from "@/api/axiosClientAPI";
 import { tokenAuth } from "@/tokens/tokenAuth";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, Bounce } from "react-toastify";
 
@@ -13,6 +13,9 @@ export default function CategoryAdd() {
     const [image, setImage] = useState({})
     const [isSubmit, setIsSubmit] = useState(false);
     const { getAuthToken } = tokenAuth();
+    if(!getAuthToken()) { 
+      redirect('/login');
+    }
     const config = {
         headers: {
           'Content-Type': 'multipart/form-data',

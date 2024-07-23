@@ -2,6 +2,7 @@
 import axiosClientAPI from '@/api/axiosClientAPI';
 import Loader from '@/app/components/Loader';
 import { tokenAuth } from '@/tokens/tokenAuth';
+import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 export default function ProfileView() {
@@ -12,6 +13,9 @@ export default function ProfileView() {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${getAuthToken()}`
   }};
+  if(!getAuthToken()) { 
+    redirect('/login');
+  }
 
   /* GET DATA */
   async function getData() {

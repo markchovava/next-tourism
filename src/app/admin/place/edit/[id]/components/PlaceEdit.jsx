@@ -4,7 +4,7 @@ import axiosClientAPI from "@/api/axiosClientAPI";
 import { baseURL } from "@/api/baseURL";
 import Loader from "@/app/components/Loader";
 import { tokenAuth } from "@/tokens/tokenAuth";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, Bounce } from "react-toastify";
 
@@ -26,6 +26,9 @@ export default function PlaceEdit({ id }) {
     const [cities, setCities] = useState();
     const [isSubmit, setIsSubmit] = useState(false);
     const { getAuthToken } = tokenAuth();
+    if(!getAuthToken()) { 
+      redirect('/login');
+    }
     const config = {
         headers: {
           'Content-Type': 'multipart/form-data',

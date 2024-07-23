@@ -1,13 +1,13 @@
 "use client"
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { FaCaretRight, FaPhoneAlt } from 'react-icons/fa';
 import { FaMapLocationDot } from 'react-icons/fa6';
 
 
 
-export default function Footer() {
-
+export default function Footer({ appInfoData }) {
+    const [data, setData] = useState(appInfoData?.data)
 
   return (
     <section className='w-[100%] bg-gradient-to-br from-green-500 to-cyan-800'>
@@ -17,7 +17,7 @@ export default function Footer() {
                 <div className='lg:w-[40%] w-[100%] px-3'>
                     <h5 className='font-semibold text-[2rem]'>Fortune Shop</h5>
                     <p>
-                        At [Your Company Name], we're passionate about bringing 
+                        At {data?.name}, we're passionate about bringing 
                         high-quality [Product Category] to the people
                     </p>
                     <div className='flex items-center justify-start'>
@@ -53,7 +53,7 @@ export default function Footer() {
                             <FaMapLocationDot />
                         </div>
                         <div>
-                            address
+                            {data?.address}
                         </div>
                     </div>
                     {/*  */}
@@ -62,7 +62,7 @@ export default function Footer() {
                             <FaPhoneAlt />
                         </div>
                         <div>
-                            phone
+                            {data?.phone}
                         </div>
                     </div>
                     {/* email */}

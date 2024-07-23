@@ -10,6 +10,8 @@ import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6'
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { toast, Bounce } from 'react-toastify'
 import { TbCategoryPlus } from "react-icons/tb";
+import { RiGuideLine } from "react-icons/ri";
+import { redirect } from 'next/navigation'
 
 
 export default function PlaceList() {
@@ -18,6 +20,9 @@ export default function PlaceList() {
     const [isSearch, setIsSearch] = useState(false)
     const { getAuthToken } = tokenAuth();
     const { getRoleToken } = tokenRole();
+    if(!getAuthToken()) { 
+      redirect('/login');
+    }
     /* PAGINATION */
     const [nextURL, setNextURL] = useState()
     const [prevURL, setPrevURL] = useState()
@@ -167,7 +172,7 @@ export default function PlaceList() {
       <section className='w-[100%]'>
         {data.length > 0 ? 
           data.map((item, i) => (
-            <div key={i} className='w-[90%] border-x border-b border-slate-300 mx-auto flex items-center justify-start '>
+            <div key={i} className='w-[90%] text-lg border-x border-b border-slate-300 mx-auto flex items-center justify-start '>
               {/* NAME */}
               <div className='w-[25%] border-r border-blue-300 px-3 py-2 flex items-center justify-between gap-2'>
                 <p className=''>{item.name}</p>
@@ -189,12 +194,16 @@ export default function PlaceList() {
               <div className='w-[20%] border-r border-blue-300 px-3 py-2'>
                 {item?.user?.name ? item?.user?.name : item?.user?.email }
               </div>
-              <div className='w-[15%] px-3 py-2 flex items-center justify-start gap-4'>
+              <div className='w-[15%] text-xl px-3 py-2 flex items-center justify-start gap-4'>
                 <Link href={`/admin/place/${item.id}`}> <FaEye className='hover:text-blue-500 duration-150 hover:scale-110 transition-all ease-in'/> </Link>
                 <Link href={`/admin/place/edit/${item.id}`}> <MdEdit className='hover:text-green-500 duration-150 hover:scale-110 transition-all ease-in' /> </Link>  
                 <Link href={`/admin/place/category/${item.id}`}> 
                   <TbCategoryPlus 
                     className='hover:text-pink-600 duration-150 hover:scale-110 transition-all ease-in' /> 
+                </Link>  
+                <Link href={`/admin/place/guide/${item.id}`}> 
+                  <RiGuideLine 
+                    className='hover:text-orange-600 duration-150 hover:scale-110 transition-all ease-in' /> 
                 </Link>  
                 
                 <button 

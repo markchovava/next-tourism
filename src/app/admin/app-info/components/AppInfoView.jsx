@@ -3,6 +3,7 @@ import axiosClientAPI from '@/api/axiosClientAPI';
 import { baseURL } from '@/api/baseURL';
 import Loader from '@/app/components/Loader';
 import { tokenAuth } from '@/tokens/tokenAuth';
+import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 
@@ -10,7 +11,10 @@ import React, { useEffect, useState } from 'react'
 
 export default function AppInfoView() {
   const [data, setData] = useState();
-  const { getAuthToken } = tokenAuth()
+  const { getAuthToken } = tokenAuth();
+  if(!getAuthToken()) { 
+    redirect('/login');
+  }
   const config = {
       headers: {
         'Content-Type': 'application/json',

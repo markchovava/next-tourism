@@ -31,6 +31,19 @@
     @apply cursor-pointer hover:text-green-400 transition-all duration-200 hover:drop-shadow-sm;
   }
 
+  .link__three {
+    @apply text-white py-3 px-[2rem] flex items-center justify-center bg-gradient-to-br from-green-600 to-blue-700 hover:bg-gradient-to-br hover:from-blue-700 hover:to-green-600 transition-all duration-200 ease-in-out rounded-lg;
+  }
+
+
+  .link__four {
+    @apply text-white py-6 px-[3.5rem] flex items-center gap-3 justify-center bg-gradient-to-br 
+    from-green-500 to-blue-500 hover:bg-gradient-to-br hover:from-blue-500 hover:to-green-500 
+    transition-all duration-200 ease-in-out rounded-xl drop-shadow-xl;
+  }
+
+  
+
   .bg__greenCyan{
     @apply w-[100%] bg-gradient-to-br from-green-500 to-cyan-600;
   }
@@ -42,9 +55,7 @@
     @apply px-[8rem] py-5 text-white rounded-lg transition-all duration-200 ease-in-out bg-gradient-to-br from-green-600 to-blue-700 hover:bg-gradient-to-br hover:from-blue-700 hover:to-green-600
   }
 
-  .link__three {
-    @apply text-white py-3 px-[2rem] flex items-center justify-center bg-gradient-to-br from-green-600 to-blue-700 hover:bg-gradient-to-br hover:from-blue-700 hover:to-green-600 transition-all duration-200 ease-in-out rounded-lg;
-  }
+ 
 
   .title__one{
     @apply text-center font-black text-[3rem] pt-[3rem] pb-[2rem] text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-blue-600;

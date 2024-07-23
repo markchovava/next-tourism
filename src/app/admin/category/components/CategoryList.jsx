@@ -4,6 +4,7 @@ import Loader from '@/app/components/Loader'
 import { tokenAuth } from '@/tokens/tokenAuth'
 import { tokenRole } from '@/tokens/tokenRole'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { FaEye, FaSearch } from 'react-icons/fa'
 import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6'
@@ -17,7 +18,9 @@ export default function CategoryList() {
     const [search, setSearch] = useState('')
     const [isSearch, setIsSearch] = useState(false)
     const { getAuthToken } = tokenAuth();
-    const { getRoleToken } = tokenRole();
+    if(!getAuthToken()) { 
+      redirect('/login');
+    }
     /* PAGINATION */
     const [nextURL, setNextURL] = useState()
     const [prevURL, setPrevURL] = useState()
