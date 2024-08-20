@@ -9,11 +9,13 @@ import StarRating from './StarRating';
 import axios from 'axios';
 import { darkBounce } from '@/utils/roastifyDark';
 import { toast } from 'react-toastify';
+import { tokenRole } from '@/tokens/tokenRole';
 
 
 
 
 export default function PlaceView({placeData, reviewsData}) {
+    const { getRoleToken }  = tokenRole();
     const [isActive, setIsActive] = useState({image: placeData?.data?.place_images[0]?.image})
     const [data, setData] = useState(placeData?.data);
     const [reviews, setReviews] = useState(reviewsData?.data);
@@ -113,7 +115,7 @@ export default function PlaceView({placeData, reviewsData}) {
     <div>
         <section className='w-[100%]'>
             <div className='mx-auto w-[90%] border-b border-slate-200'>
-                <ul className='flex items-center justify-start gap-2 px-3 py-2'>
+                <ul className='flex items-center justify-start gap-2 py-2'>
                     <li><Link href='/'>Home</Link></li>
                     <li><FaAngleRight /></li>
                     <li><Link href='/place'>Places</Link></li>
@@ -283,11 +285,13 @@ export default function PlaceView({placeData, reviewsData}) {
                                 </p>
                                 <div className='italic text-lg flex items-center justify-between gap-3'>
                                     <p>{i.email}</p>
+                                    { getRoleToken() <= 2 &&
                                     <button 
                                         onClick={() => deleteReview(i.id)} 
                                         className='text-sm text-red-600 hover:text-slate-600 underline hover:no-underline'>
                                         Delete
                                     </button>
+                                    }
                                 </div>
                             </div>
                         ))

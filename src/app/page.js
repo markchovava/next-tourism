@@ -17,11 +17,12 @@ import CarouselProvince from "./components/CarouselProvince";
 
 
 export default async function Home() {
-   const [eventsByNumber, citiesOne, categoriesOne, placesToVisit, 
+   const [eventsByNumber, citiesOne, categoriesOne, placeNationalHeritage, placeSpecialActivities,
           placesEntertainment, placeEatSleep, provinces] = await Promise.all([ 
           getEventsByNumber(4), getCitiesOne(), getCategoriesOne(), 
-          getPlacesByGuideSlug('places-to-visit'), getPlacesByGuideSlug('entertainment'),
-          getPlacesByGuideSlug('where-to-eat-and-sleep'), getProvinces()
+          getPlacesByGuideSlug('national-heritage'), getPlacesByGuideSlug('special-activities'),
+          getPlacesByGuideSlug('entertainment'), getPlacesByGuideSlug('where-to-eat-and-sleep'), 
+          getProvinces()
     ]);
 
   return (
@@ -29,7 +30,9 @@ export default async function Home() {
 
     <SliderMain eventsByNumber={eventsByNumber} />
     {/*  */}
-    <CarouselPlace dbData={placesToVisit} title={'Places to Visit'} slug={'places-to-visit'} />
+    <CarouselPlace dbData={placeNationalHeritage} title={'National Heritage'} slug={'national-heritage'} />
+    {/*  */}
+    <CarouselPlace dbData={placeSpecialActivities} title={'Special Activities'} slug={'special-activities'} />
     {/*  */}
     <CarouselPlace dbData={placesEntertainment} title={'Entertainment'} slug={'entertainment'} />
 

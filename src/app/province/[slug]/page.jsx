@@ -2,15 +2,18 @@ import React from 'react'
 import ProvinceCities from './components/ProvinceCities';
 import { getProvinceBySlug, getProvinceCities } from '@/api/getProvinces';
 import CarouselCategory from './components/CarouselCategory';
-import { getCategoriesOne } from '@/api/getCategories';
+import { getCategories } from '@/api/getCategories';
+import CarouselGuide from './components/CarouselGuide';
+import { getGuides } from '@/api/getGuides';
 
 
 
 export default async function page({ params: {slug} }) {
-    const [cities, province, categoriesOne] = await Promise.all([
+    const [cities, province, categoriesData, guidesData] = await Promise.all([
           getProvinceCities(slug), 
           getProvinceBySlug(slug),
-          getCategoriesOne()
+          getCategories(),
+          getGuides(),
         ]);
 
   return (
@@ -21,9 +24,15 @@ export default async function page({ params: {slug} }) {
           slug={slug} />
 
         <CarouselCategory 
-          title={'Top Categories'}
+          title={'Category Listings'}
           province={province} 
-          categoriesOne={categoriesOne} />
+          categoriesData={categoriesData} />
+
+          <CarouselGuide 
+            province_slug={slug} 
+            title={'Travel Guides'} 
+            dbData={guidesData} />
+    
     </div>
   )
 }

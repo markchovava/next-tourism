@@ -67,17 +67,22 @@ export default function PlaceList({places, city, category_slug, city_slug}) {
   useEffect(()=>{
       isSearch === true && searchData();
   },[isSearch]);
+
+
+
+
   return (
     <div>
         {/* Bread Crumbs */}
         <section className='w-[100%]'>
             <div className='mx-auto w-[90%] border-b border-slate-200'>
-                <ul className='flex items-center justify-start gap-2 px-3 py-2'>
+                <ul className='flex items-center justify-start gap-2 py-2'>
                     <li><Link href='/'>Home</Link></li>
                     <li><FaAngleRight /></li>
                     <li><Link href='/city'>City</Link></li>                               
                     <li><FaAngleRight /></li>
-                    <li><Link href={`/city/category/${category_slug}/${city_slug}`}>{city?.data?.name}</Link></li>                               
+                    <li><Link href={`/city/category/${category_slug}/${city_slug}`}>
+                        {city?.data?.name}</Link></li>                               
                 </ul>
             </div>
         </section>
@@ -141,10 +146,10 @@ export default function PlaceList({places, city, category_slug, city_slug}) {
                         <div key={key} className='group'>
                             <div className='relative w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-2'>
                                 <img src={baseURL + i?.place_images[0]?.image} className='w-[100%] h-[100%] object-cover zoom__inOut' />
-                                <span className='heart__icon'>
+                               {/*  <span className='heart__icon'>
                                     <FaRegHeart  />
                                     <FaHeart />
-                                </span>
+                                </span> */}
                             </div>
                                 <div className='pb-2 px-4'>
                                 <Link href={`/place/${i.id}`}>

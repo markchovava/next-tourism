@@ -1,38 +1,56 @@
 import { getCategoriesOne, getCategoryPlaces } from "@/api/getCategories";
-import { getPlacesOne } from "@/api/getPlaces";
-import { getProvincesAll } from "@/api/getProvinces";
-import { getCitiesOne } from "@/api/getCities";
+import { getPlaces, getPlacesOne } from "@/api/getPlaces";
+import { getProvinces, getProvincesAll } from "@/api/getProvinces";
+import { getCities, getCitiesOne } from "@/api/getCities";
 /* COMPONENTS */
 import CarouselCategory from "../components/CarouselCategory";
 import CarouselCity from "../components/CarouselCity";
-import GridPlaces from "../components/GridPlaces";
-import CarouselHotels from "../components/CarouselHotels";
-import CarouselRestaurants from "../components/CarouselRestaurants";
 import MainCarousel from "./components/MainCarousel";
+import CarouselPlaceListing from "./components/CarouselPlaceListing";
+import CarouselGuide from "../components/CarouselGuide";
+import { getGuides } from "@/api/getGuides";
+import CarouselProvince from "../components/CarouselProvince";
+import Link from "next/link";
+import { FaAngleRight } from "react-icons/fa6";
 
 
 
 
 export default async function Home() {
-   const [provinces, citiesOne, categoriesOne, placesOne, hotelPlaces, restaurantPlaces] = await Promise.all([ 
-        getProvincesAll(), getCitiesOne(), getCategoriesOne(), 
-        getPlacesOne(), getCategoryPlaces('hotels'), getCategoryPlaces('restaurants'),
+   const [provincesData, citiesData, categoriesOne, placesData, guidesData ] = await Promise.all([ 
+        getProvinces(), getCities(), getCategoriesOne(), 
+        getPlaces(), getGuides(),
     ]);
 
   return (
-   <div>
-    {/* CAROUSEL */}
-    <MainCarousel provinces={provinces} />
+   <>
+    {/* Bread Crumbs */}
+    <section className='w-[100%]'>
+      <div className='mx-auto w-[90%] border-b border-slate-200'>
+          <ul className='flex items-center justify-start gap-2 px-3 py-2'>
+              <li><Link href='/'>Home</Link></li>
+              <li><FaAngleRight /></li>
+              <li><Link href='/directory'>Directory Listings</Link></li>                               
+          </ul>
+      </div>
+    </section>
 
-    <CarouselCategory title='Top Categories' categoriesOne={categoriesOne} />
+    <section className="">
+      <h3 className="pt-[10rem] pb-[5rem] font-bold text-[3rem] flex items-center justify-center">
+        Zimbabwe Directory Listing</h3>
+    </section>
 
-    <CarouselCity title='Top Cities' dbData={citiesOne} />
+    <CarouselProvince title='Province Listings' dbData={provincesData} />
 
-    <GridPlaces title='Places to be.' placesOne={placesOne} />
+    <CarouselCategory title='Category Listings' categoriesOne={categoriesOne} />
 
-    <CarouselHotels title='Hotels' slug='hotels' hotelPlaces={hotelPlaces} />
+    <CarouselCity title='Cities Listing' dbData={citiesData} />
 
-    <CarouselRestaurants title='Restaurants' slug='restaurants' restaurantPlaces={restaurantPlaces} />
-  </div>
+    <CarouselPlaceListing dbData={placesData} title={'Places to visit.'} />
+
+    <CarouselGuide title={'Travel Guides'} dbData={guidesData} />
+
+    
+  </>
   );
 }

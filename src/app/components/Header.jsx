@@ -20,13 +20,13 @@ export default function Header() {
     const { removeRoleToken } = tokenRole();
     const [isLogout, setIsLogout] = useState(false);
 
-
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
             'Authorization': `Bearer ${getAuthToken()}`, 
         }
     }
+
     /* LOGOUT */
     async function postLogout() {
         try{
@@ -46,7 +46,6 @@ export default function Header() {
         } 
     } 
 
-
     useEffect(() => {
         isLogout == true && postLogout();
     }, [isLogout])
@@ -58,19 +57,17 @@ export default function Header() {
         {getAuthToken() &&
             <TopNav />
         }
-        <section className="w-[100%] ">
-            <div className="w-[90%] mx-auto flex lg:flex-row flex-col items-center gap-4 justify-start py-4">
+        <section className="w-[100%] pt-[2rem] pb-[1rem]">
+            <div className="w-[94%] mx-auto flex lg:flex-row flex-col items-center gap-4 justify-start py-4">
                 <div className="lg:w-[20%] w-[100%] flex items-center justify-center">
-                    <div className="text-[4rem] font-extrabold">
+                    <div className="text-[2rem] font-extrabold">
                         <Link href='/'>
-                            <span className="text-green-600">Z</span>
-                            <span className="text-yellow-500">N</span>
-                            <span className="text-red-600">A</span>
-                            <span className="text-black">C</span>
+                        <span className="text-green-700">Enjoy</span>
+                        <span>Zimbabwe</span>
                         </Link>
                     </div>
                 </div>
-                <div className="w-[100%]">
+                <div className="lg:w-[45%] w-[100%]">
                     <div className="w-[96%] mx-auto border border-slate-300 rounded-full overflow-hidden flex items-center justify-start">
                         <input type="text" className="w-[90%] outline-none px-5 py-3" placeholder="Search places by name..." />
                         <button className="w-[5%] h-[100%] border-none outline-none flex items-center justify-center text-center">
@@ -78,22 +75,22 @@ export default function Header() {
                         </button>
                     </div>
                 </div>
-                <div className="w-[30%] flex items-center justify-start">
-                    <nav className="w-[100%] flex items-center lg:justify-end justify-center gap-4">
-                        <ul className="flex justify-start items-center gap-3">
+                <div className="lg:w-[35%] w-[100%] flex items-center justify-start">
+                    <nav className="w-[100%] flex items-center lg:justify-end justify-center gap-3">
+                        <ul className="flex justify-start items-center gap-1 text-[0.9rem]">
                         <li>
-                            <Link href='/directory' className="p-3 rounded-full transition-all duration-100 ease-in-out text-slate-900 hover:bg-slate-100 flex items-center justify-center gap-1">
-                            Directory
+                            <Link href='/directory' className="p-2 rounded-full transition-all duration-100 ease-in-out text-slate-900 hover:bg-green-50 hover:drop-shadow flex items-center justify-center gap-1 ">
+                            Directory Listings
                             </Link>
                         </li>
                         <li>
-                            <Link href='/place' className="p-3 rounded-full transition-all duration-100 ease-in-out text-slate-900 hover:bg-slate-100 flex items-center justify-center gap-1">
-                            Places 
+                            <Link href='/place' className="p-2 rounded-full transition-all duration-100 ease-in-out text-slate-900 hover:bg-green-50 hover:drop-shadow flex items-center justify-center gap-1">
+                            Places to visit
                             </Link>
                         </li>
                         <li>
-                            <Link href='/guide' className="p-3 rounded-full transition-all duration-100 ease-in-out text-slate-900 hover:bg-slate-100 flex items-center justify-center gap-1">
-                            Guides 
+                            <Link href='/guide' className="p-2 rounded-full transition-all duration-100 ease-in-out text-slate-900 hover:bg-green-50 hover:drop-shadow flex items-center justify-center gap-1">
+                            Travel Guide 
                             </Link>
                         </li>
                         </ul>

@@ -26,10 +26,7 @@ export default function Grid8({title, placesOne}) {
                     <div key={key} className='group'>
                         <div className='relative w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-2'>
                             <img src={baseURL + i.place_images[0].image} className='w-[100%] h-[100%] object-cover zoom__inOut' />
-                            <span className='heart__icon'>
-                                <FaRegHeart  />
-                                <FaHeart />
-                            </span>
+                           
                         </div>
                             <div className='pb-2 px-4'>
                                 <Link href={`/place/${i.id}`}>

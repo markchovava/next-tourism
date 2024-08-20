@@ -120,7 +120,7 @@ export default function CategoryPlaceList({category, places, cities, slug }) {
         {/* Bread Crumbs */}
       <section className='w-[100%]'>
             <div className='mx-auto w-[90%] border-b border-slate-200'>
-                <ul className='flex items-center justify-start gap-2 px-3 py-2'>
+                <ul className='flex items-center justify-start gap-2 py-2'>
                     <li><Link href='/'>Home</Link></li>
                     <li><FaAngleRight /></li>
                     <li><Link href='/category'>Categories</Link></li>
@@ -133,7 +133,7 @@ export default function CategoryPlaceList({category, places, cities, slug }) {
 
          <section className='w-[100%]'>
             <div className='mx-auto w-[90%] flex items-center justify-center flex-col pt-[10rem] pb-[5rem]'>
-                <h6>Find your best place to visit</h6>
+                <h6>Find the best place to visit:</h6>
                 <div className="w-[80%] mx-auto border border-slate-300 rounded-full overflow-hidden flex items-center justify-start">
                     <input 
                         type="text" 

@@ -3,6 +3,7 @@
 import { baseURL } from '@/api/baseURL';
 import { tokenAuth } from '@/tokens/tokenAuth';
 import { tokenRole } from '@/tokens/tokenRole';
+import { darkBounce } from '@/utils/roastifyDark';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -67,31 +68,11 @@ export default function LoginEdit() {
               console.log(message)
               setErrMsg({password: message });
               setIsSubmit(false);
-              toast.warn(message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
+              toast.warn(message, darkBounce);
               return;
             }
             if(response.data.status == 1) {
-              toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
+              toast.success(response.data.message, darkBounce);
               setAuthToken(response.data.auth_token)
               setRoleToken(response.data.role_level)
               setIsSubmit(false);    

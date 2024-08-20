@@ -76,7 +76,7 @@ export default function ProvinceList({provinces}) {
         {/* Bread Crumbs */}
       <section className='w-[100%]'>
             <div className='mx-auto w-[90%] border-b border-slate-200'>
-                <ul className='flex items-center justify-start gap-2 px-3 py-2'>
+                <ul className='flex items-center justify-start gap-2 py-2'>
                     <li><Link href='/'>Home</Link></li>
                     <li><FaAngleRight /></li>
                     <li><Link href='/province'>Province</Link></li>                               
@@ -137,10 +137,7 @@ export default function ProvinceList({provinces}) {
                     {data?.map((i, key) => (
                         <div key={key} className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
                             <img src={baseURL + i.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                            <span className='heart__icon'>
-                                <FaRegHeart  />
-                                <FaHeart />
-                            </span>
+                            
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                             </div>
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>

@@ -2,20 +2,20 @@
 import { baseURL } from '@/api/baseURL';
 import axios from 'axios';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { FaRegHeart, FaHeart, FaArrowRightLong, FaArrowLeftLong, FaAngleRight } from "react-icons/fa6";
+import React, { useEffect, useState } from 'react'
+import { FaAngleRight, FaHeart, FaRegHeart, FaRegStar, FaStar } from 'react-icons/fa6';
 import { IoIosSearch } from 'react-icons/io';
 
 
 
-export default function CityList({ cities }) {
-    const [data, setData] = useState(cities.data);
+export default function GuidePlaceList({province, dbData, guide_slug, province_slug}) {
+    console.log(dbData);
+    const [data, setData] = useState(dbData?.data);
     const [search, setSearch] = useState('');
     const [isSearch, setIsSearch] = useState(false);
-    const [nextURL, setNextURL] = useState(cities?.links?.next)
-    const [prevURL, setPrevURL] = useState(cities?.links?.prev)
-
-     /* PAGINATION DATA */
+    const [nextURL, setNextURL] = useState(dbData?.links?.next);
+    const [prevURL, setPrevURL] = useState(dbData?.links?.prev);
+    /* PAGINATION DATA */
     async function paginationHandler(url) {
         try{
         const result = await axios.get(url)
@@ -31,28 +31,7 @@ export default function CityList({ cities }) {
     /* GET DATA */
     async function getData() {
         try{
-            const result = await axios.get(`${baseURL}city`)
-            .then((response) => {
-                setData(response.data.data)
-                setPrevURL(response.data.links.prev)
-                setNextURL(response.data.links.next)
-                setIsSearch(false);
-                return;
-            })
-        } catch (error) {
-            console.error(`Error: ${error}`)
-            setIsSearch(false);
-        }  
-    }  
-     /* SEARCH DATA */
-    async function searchData() {
-        if(!search){
-            getData();
-            setIsSearch(false);
-            return;
-        }
-        try{
-            const result = await axios.get(`${baseURL}city?search=${search}`)
+            const result = await axios.get(`${baseURL}place-province-guide?guide_slug=${guide_slug}&province_slug=${province_slug}`)
             .then((response) => {
                 setData(response.data.data)
                 setPrevURL(response.data.links.prev)
@@ -65,11 +44,31 @@ export default function CityList({ cities }) {
             setIsSearch(false);
         }  
     } 
-  
-  useEffect(() => {
-    isSearch === true && searchData();
-  }, [isSearch]);
-
+    /* SEARCH DATA */
+    async function searchData() {
+        if(!search){
+            getData();
+            setIsSearch(false);
+            return;
+        }
+        try{
+            const result = await axios.get(`${baseURL}place-province-guide?guide_slug=${guide_slug}&province_slug=${province_slug}&search=${search}`)
+            .then((response) => {
+                setData(response.data.data)
+                setPrevURL(response.data.links.prev)
+                setNextURL(response.data.links.next)
+                setIsSearch(false);
+                return;
+            })
+        } catch (error) {
+            console.error(`Error: ${error}`)
+            setIsSearch(false);
+        }  
+    } 
+    /*  */
+    useEffect(()=>{
+        isSearch === true && searchData();
+    },[isSearch]);
 
   return (
     <div>
@@ -79,20 +78,23 @@ export default function CityList({ cities }) {
                 <ul className='flex items-center justify-start gap-2 py-2'>
                     <li><Link href='/'>Home</Link></li>
                     <li><FaAngleRight /></li>
-                    <li><Link href='/city'>Cities</Link></li>                               
+                    <li><Link href='/province'>Province</Link></li>                               
+                    <li><FaAngleRight /></li>
+                    <li><Link href={`/province/guide/${province_slug}/${guide_slug}`}>
+                      {province?.data?.name}</Link></li>                               
                 </ul>
             </div>
         </section>
+        {/*  */}
         <section className='w-[100%]'>
             <div className='mx-auto w-[90%] flex items-center justify-center flex-col pt-[10rem] pb-[5rem]'>
-                <h6>Find your a city to visit</h6>
+                <h6>Find a place to visit in {province?.data?.name}.</h6>
                 <div className="w-[80%] mx-auto border border-slate-300 rounded-full overflow-hidden flex items-center justify-start">
                     <input 
                         type="text" 
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-[90%] outline-none px-5 py-4 border-r border-slate-200" 
-                        placeholder="Search Cities by name..." />
+                        className="w-[90%] outline-none px-5 py-4 border-r border-slate-200" placeholder="Search places by name..." />
                    
                    <button 
                         onClick={() => setIsSearch(true)}
@@ -108,13 +110,12 @@ export default function CityList({ cities }) {
                 </div>
             </div>
         </section>
-
-        {/*  */}
-        <section className='w-[100%]'>
+         {/*  */}
+         <section className='w-[100%]'>
             <div className='w-[90%] mx-auto pb-[5rem]'>
                 <div className='w-[100%] flex items-center justify-between pb-3'>
                     <h6 className="text-[2.5rem] font-semibold">
-                        Cities
+                        Places
                     </h6>
                     {/* PAGINATION */}
                     <div className='flex items-center justify-end gap-3'>
@@ -137,23 +138,30 @@ export default function CityList({ cities }) {
                     
                 </div>
                 {/* DATA */}
-                {data.length > 0 ?
+                {data?.length > 0 ? 
                 <div className='grid lg:grid-cols-4 grid-cols-2 gap-8 mb-8'>
                     {/* COL */}
-                    {data.map((i, key) => (
-                        <div key={key} className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                            <img src={baseURL + i.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                           {/*  <span className='heart__icon'>
-                                <FaRegHeart  />
-                                <FaHeart />
-                            </span> */}
-                            <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
+                    {data?.map((i, key) => (
+                        <div key={key} className='group'>
+                            <div className='relative w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-2'>
+                                <img src={baseURL + i?.place_images[0]?.image} className='w-[100%] h-[100%] object-cover zoom__inOut' />
+                                
                             </div>
-                            <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                <Link href={`/city/${i.slug}`} className='link__two'>
-                                    {i.name} 
-                                </Link> 
-                            </div>
+                                <div className='pb-2 px-4'>
+                                <Link href={`/place/${i.id}`}>
+                                        <p className='mb-2 font-semibold link__one'>
+                                            {i.name} 
+                                        </p>
+                                    </Link>
+                                    <p className='mb-2 flex items-center justify-start gap-2'>
+                                        <FaStar />
+                                        <FaStar />
+                                        <FaStar />
+                                        <FaStar />
+                                        <FaRegStar />
+                                    </p>
+                                    <p>{i?.city?.name}</p>
+                                </div>
                         </div>
                     ))}
                 </div>
@@ -162,30 +170,29 @@ export default function CityList({ cities }) {
                     Data not found.
                 </div>
                 }
+
                 {/* PAGINATION */}
                 <div className='flex items-center justify-end gap-3'>
                     {prevURL &&
-                        <button
-                            onClick={() => paginationHandler(prevURL)}
-                            className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
-                            <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-600' /> 
-                            Prev 
-                        </button>
+                    <button
+                        onClick={() => paginationHandler(prevURL)}
+                        className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
+                        <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-600' /> 
+                        Prev 
+                    </button>
                     }
                     {nextURL &&
-                        <button 
-                            onClick={() => paginationHandler(nextURL)}
-                            className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
-                            Next <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out text-green-600' />
-                        </button>
+                    <button 
+                        onClick={() => paginationHandler(nextURL)}
+                        className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-cyan-700'>
+                        Next <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out text-green-600' />
+                    </button>
                     }
                 </div>
             </div>
 
         </section>
-
-       
-
     </div>
   )
 }
+

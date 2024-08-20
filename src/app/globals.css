@@ -8,7 +8,7 @@
 @layer base {
 
   h6{
-    @apply text-[3rem] font-semibold mb-4;
+    @apply text-[2.5rem] font-semibold mb-4;
   }
 
   h5{

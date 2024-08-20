@@ -24,7 +24,7 @@ export default function CarouselProvince({ title, dbData }) {
                         <h6 className="text-[2.5rem] font-semibold ">
                             {title}
                         </h6>
-                        <Link href='/city'>
+                        <Link href='/province'>
                             <span className='font-semibold link__one'>View More</span>
                         </Link>
                     </div>
@@ -50,7 +50,7 @@ export default function CarouselProvince({ title, dbData }) {
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                                     </div>
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                        <Link href={`/city/${i.slug}`} className='link__two'>
+                                        <Link href={`/province/${i.slug}`} className='link__two'>
                                             {i.name}
                                         </Link>
                                         
@@ -85,10 +85,7 @@ export default function CarouselProvince({ title, dbData }) {
                             <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                                 <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
                                     <img src={`http://localhost:3000/assets/img/${i}`} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                                    <span className='heart__icon'>
-                                        <FaRegHeart  />
-                                        <FaHeart />
-                                    </span>
+                                   
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                                     </div>
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>

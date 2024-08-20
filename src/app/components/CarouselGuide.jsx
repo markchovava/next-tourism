@@ -14,8 +14,8 @@ import { baseURL } from '@/api/baseURL';
 
 
 
-export default function CarouselCity({ title, dbData }) {
-    const [data, setData] = useState(dbData.data)
+export default function CarouselGuide({ title, dbData }) {
+    const [data, setData] = useState(dbData?.data)
 
     return (
         <section className='w-[100%]'>
@@ -25,7 +25,7 @@ export default function CarouselCity({ title, dbData }) {
                         <h6 className="text-[2.5rem] font-semibold ">
                             {title}
                         </h6>
-                        <Link href='/city'>
+                        <Link href='/guide'>
                             <span className='font-semibold link__one'>View More</span>
                         </Link>
                     </div>
@@ -40,18 +40,15 @@ export default function CarouselCity({ title, dbData }) {
                         onSwiper={(swiper) => console.log(swiper)}
                         onSlideChange={() => console.log('slide change')}
                         className='card__transparent' >
-                        {data.map((i, key) => (
+                        {data?.map((i, key) => (
                             <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                                 <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                                    <img src={baseURL + i.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                                    {/* <span className='heart__icon'>
-                                        <FaRegHeart  />
-                                        <FaHeart />
-                                    </span> */}
+                                    <img src={baseURL + i.portrait} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                                    
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                                     </div>
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                        <Link href={`/city/${i.slug}`} className='link__two'>
+                                        <Link href={`/category/${i.slug}`} className='link__two'>
                                             {i.name}
                                         </Link>
                                         
@@ -67,7 +64,7 @@ export default function CarouselCity({ title, dbData }) {
                         <h6 className="text-[2.5rem] font-semibold">
                             {title}
                         </h6>
-                        <Link href='#' className='flex items-center justify-center'>
+                        <Link href='/guide' className='flex items-center justify-center'>
                             <span className='flex items-center justify-center font-semibold link__one'>View More</span>
                         </Link>
                     </div>
@@ -85,16 +82,13 @@ export default function CarouselCity({ title, dbData }) {
                         {data.map((i, key) => (
                             <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                                 <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                                    <img src={`http://localhost:3000/assets/img/${i}`} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                                    <span className='heart__icon'>
-                                        <FaRegHeart  />
-                                        <FaHeart />
-                                    </span>
+                                    <img src={baseURL + i.portrait} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                                     </div>
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                        <Link href='#' className='link__two'>
-                                            Category 
+                                        <Link href={`/guide/${i.slug}`} className='link__two'>
+                                            {i.name}
                                         </Link>
                                         
                                     </div>

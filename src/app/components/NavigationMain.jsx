@@ -14,9 +14,6 @@ export default function NavigationMain() {
             <li className="py-2 ">
                 <Link href='/' className="hover:text-green-600 ">Home</Link>
             </li>
-            <li className="py-2 ">
-                <Link href='/guide-place/places-to-visit' className="hover:text-green-600 ">Places to visit</Link>
-            </li>
             <li className="py-2">
                 <Link href='/guide-place/things-to-see' className="hover:text-green-600 ">Things to see</Link>
             </li>

@@ -48,10 +48,7 @@ export default function CarouselPlace({title, dbData, slug}) {
                                 <img
                                     src={i.place_images[0]?.image ? baseURL + i.place_images[0]?.image : ''} 
                                     className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                                <span className='heart__icon'>
-                                    <FaRegHeart  />
-                                    <FaHeart />
-                                </span>
+                               
                             </div>
                             <div className='pb-2 px-4'>
                                 <Link href={`/place/${i.id}`}>

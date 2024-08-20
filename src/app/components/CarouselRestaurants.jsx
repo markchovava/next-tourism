@@ -44,10 +44,7 @@ export default function CarouselRestaurants({title, restaurantPlaces, slug}) {
                         <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                             <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
                                 <img src={baseURL + i.place_images[0]?.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                                <span className='heart__icon'>
-                                    <FaRegHeart  />
-                                    <FaHeart />
-                                </span>
+                                
                             </div>
                             <div className='pb-2 px-4'>
                                 <Link href={`/place/${i.id}`}>

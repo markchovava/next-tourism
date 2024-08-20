@@ -133,10 +133,7 @@ export default function GuideList({ guidesData }) {
                     {data.map((i, key) => (
                         <div key={key} className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
                             <img src={baseURL + i.portrait} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                            <span className='heart__icon'>
-                                <FaRegHeart  />
-                                <FaHeart />
-                            </span>
+                            
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opaguide-75 text-white'>
                             </div>
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>

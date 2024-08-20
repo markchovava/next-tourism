@@ -17,8 +17,6 @@ import { toast, Bounce } from 'react-toastify'
 
 
 export default function CategoryList({ categories }) {
-  console.log('categories')
-  console.log(categories)
   const [data, setData] = useState(categories.data);
     const [search, setSearch] = useState('')
     const [isSearch, setIsSearch] = useState(false)
@@ -93,13 +91,14 @@ export default function CategoryList({ categories }) {
     <div>
        <section className='w-[100%]'>
             <div className='mx-auto w-[90%] flex items-center justify-center flex-col pt-[10rem] pb-[5rem]'>
-                <h6>Find the Category</h6>
+                <h6>Find the Category:</h6>
                 <div className="w-[80%] mx-auto border border-slate-300 rounded-full overflow-hidden flex items-center justify-start">
                     <input 
                       value={search}
                       onChange={(e) => setSearch(e.target.value)} 
                       type="text" 
-                      className="w-[90%] outline-none px-5 py-4 border-r border-slate-200" placeholder="Search places by name..." />
+                      className="w-[90%] outline-none px-5 py-4 border-r border-slate-200" 
+                      placeholder="Search Category by name..." />
                    
                     <button 
                       onClick={() => setIsSearch(true)}
