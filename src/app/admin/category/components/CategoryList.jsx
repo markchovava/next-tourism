@@ -148,7 +148,7 @@ export default function CategoryList() {
                     Next <FaArrowRightLong className='text-orange-400 group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
                 </button>
               }
-              </div>
+            </div>
             <Link href='/admin/category/add' 
               className='link__three'>
               Add</Link>

@@ -285,12 +285,18 @@ export default function PlaceView({placeData, reviewsData}) {
                                 </p>
                                 <div className='italic text-lg flex items-center justify-between gap-3'>
                                     <p>{i.email}</p>
-                                    { getRoleToken() <= 2 &&
-                                    <button 
-                                        onClick={() => deleteReview(i.id)} 
-                                        className='text-sm text-red-600 hover:text-slate-600 underline hover:no-underline'>
-                                        Delete
-                                    </button>
+                                    {getRoleToken() &&
+                                    <>
+                                        { getRoleToken() <= 2 &&
+                                        <>
+                                        <button 
+                                            onClick={() => deleteReview(i.id)} 
+                                            className='text-sm text-red-600 hover:text-slate-600 underline hover:no-underline'>
+                                            Delete
+                                        </button>
+                                        </>
+                                        }
+                                    </>
                                     }
                                 </div>
                             </div>

@@ -50,17 +50,7 @@ export default function LoginEdit() {
               const message = response.data.message;
               setErrMsg({email: message });
               setIsSubmit(false);
-              toast.warn(message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
+              toast.warn(message, darkBounce);
               return;
             }
             if(response.data.status == 2){
