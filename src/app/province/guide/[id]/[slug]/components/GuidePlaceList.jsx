@@ -1,5 +1,6 @@
 "use client";
 import { baseURL } from '@/api/baseURL';
+import StarRate from '@/app/components/StarRate';
 import axios from 'axios';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
@@ -153,13 +154,10 @@ export default function GuidePlaceList({province, dbData, guide_slug, province_s
                                             {i.name} 
                                         </p>
                                     </Link>
-                                    <p className='mb-2 flex items-center justify-start gap-2'>
-                                        <FaStar />
-                                        <FaStar />
-                                        <FaStar />
-                                        <FaStar />
-                                        <FaRegStar />
-                                    </p>
+                                    {/* STAR */}
+                                    {i?.rating?.rate &&
+                                    <StarRate dbData={i?.rating} />
+                                    }
                                     <p>{i?.city?.name}</p>
                                 </div>
                         </div>

@@ -9,8 +9,8 @@ export default function NavigationMain() {
     <>
     {/* NAVIGATION */}
     <section className="w-[100%]">
-    <nav className="w-[90%] lg:block hidden mx-auto border-b border-slate-200">
-        <ul className="font-semibold flex justify-start items-center gap-4 h-[100%] text-black">
+    <nav className="w-[94%] lg:block hidden mx-auto border-b border-slate-200">
+        <ul className="font-medium flex justify-start items-center gap-4 h-[100%] text-black">
             <li className="py-2 ">
                 <Link href='/' className="hover:text-green-600 ">Home</Link>
             </li>
@@ -50,7 +50,7 @@ export default function NavigationMain() {
     </div>
     {isToggle == true &&
     <nav className="w-[90%] block lg:hidden mx-auto border-b border-slate-200">
-        <ul className="font-semibold flex flex-col justify-start items-center gap-4 h-[100%] text-black">
+        <ul className="font-medium flex flex-col justify-start items-center gap-4 h-[100%] text-black">
             <li className="py-2 ">
                 <Link href='/' className="hover:text-green-600 ">Home</Link>
             </li>

@@ -21,7 +21,8 @@ export default function PlaceView({placeData, reviewsData}) {
     const [reviews, setReviews] = useState(reviewsData?.data);
     const [inputData, setInputData] = useState({})
     const [isSubmit, setIsSubmit] = useState(false);
-    const [rating, setRating] = useState(null);
+    const [rating, setRating] = useState();
+    const [errMsg, setErrMsg] = useState({});
      /* PAGINATION */
      const [nextURL, setNextURL] = useState(reviewsData?.links?.next)
      const [prevURL, setPrevURL] = useState(reviewsData?.links?.prev)
@@ -46,6 +47,27 @@ export default function PlaceView({placeData, reviewsData}) {
     }
 
     async function postData(){
+        if(!inputData.email) {
+            const message = 'Email is required.'
+            toast.warn(message, darkBounce);
+            setErrMsg({email: message});
+            setIsSubmit(false);
+            return;
+        }
+        if(!rating) {
+            const message = 'Rating is required.'
+            toast.warn(message, darkBounce);
+            setErrMsg({rating: message});
+            setIsSubmit(false);
+            return;
+        }
+        if(!inputData.message) {
+            const message = 'Review Message is required.'
+            toast.warn(message, darkBounce);
+            setErrMsg({message: message});
+            setIsSubmit(false);
+            return;
+        }
         const formData = {
             email: inputData.email,
             rating: rating,
@@ -57,12 +79,13 @@ export default function PlaceView({placeData, reviewsData}) {
             .then((response) => {
               if(response.data.status == 1){
                 toast.success(response.data.message, darkBounce);
-                setInputData({
+                /* setInputData({
                     email: '',
                     message: '',
                 });
-                setRating(null);
+                setRating(null); */
                 getData();
+                getReview();
                 setIsSubmit(false);
               }
               }
@@ -77,6 +100,16 @@ export default function PlaceView({placeData, reviewsData}) {
     } 
     /* GET DATA */
     async function getData() {
+        try{
+        const result = await axios.get(`${baseURL}place/${data.id}`)
+        .then((response) => {
+            setData(response.data?.data)
+        })
+        } catch (error) {
+        console.error(`Error: ${error}`)
+        }   
+    }  
+    async function getReview() {
         try{
         const result = await axios.get(`${baseURL}review-by-place-id/${data.id}`)
         .then((response) => {
@@ -107,7 +140,11 @@ export default function PlaceView({placeData, reviewsData}) {
 
     useEffect(() => {
         isSubmit === true && postData();
-    },[isSubmit])
+    },[isSubmit]);
+
+
+    console.log('PLACE data');
+    console.log(data);
 
     
 
@@ -128,7 +165,21 @@ export default function PlaceView({placeData, reviewsData}) {
         <section className='w-[100%]'>
             <div className='w-[90%] mx-auto pt-[2rem] flex items-center justify-between'>
                 <h5 className='mb-2'>{data.name}</h5>
-               
+                <div className='text-xl cursor-pointer flex items-center justify-start gap-3'>
+                    { data?.rating?.rate &&
+                    [...Array(5)].map((a, key) => {
+                        const currentIndex = key + 1;
+                        return (
+                            <>
+                                { currentIndex <= data?.rating?.rate
+                                    ? <FaStar className='text-slate-600' />
+                                    : <FaRegStar className='text-slate-600' />
+                                } 
+                            </>
+                        )
+                    })}
+
+                </div>
             </div>
         </section>
         <section className='w-[100%] mb-[5rem]'>
@@ -230,11 +281,15 @@ export default function PlaceView({placeData, reviewsData}) {
                         onChange={handleInput}
                         placeholder='Enter Email here...'
                         className='outline-none border border-slate-300 px-5 py-4 rounded-xl w-[100%]' />
+                    {errMsg?.email &&
+                    <div className='text-red-600'>{errMsg?.email}</div> }
                 </div>
                 {/* REVIEW */}
                 <div className='mb-4'>
                     <div className='font-semibold mb-1'>Rate out of 5:</div>
                     <StarRating rating={rating} setRating={setRating} />
+                    {errMsg?.rating &&
+                    <div className='text-red-600'>{errMsg?.rating}</div> }
                 </div>
                 {/* TEXT AREA */}
                 <div className='mb-4'>
@@ -244,6 +299,8 @@ export default function PlaceView({placeData, reviewsData}) {
                         onChange={handleInput}
                         placeholder='Write your Review here...'
                         className='outline-none border border-slate-300 h-[10rem] px-5 py-4 rounded-xl w-[100%]'></textarea>
+                    {errMsg?.message &&
+                    <div className='text-red-600'>{errMsg?.message}</div> }
                 </div>
                 {/* BUTTON */}
                 <div className='w-[100%] flex items-center justify-center mb-4'>
