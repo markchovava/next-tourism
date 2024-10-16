@@ -1,5 +1,6 @@
 "use client";
 
+import { loginAction } from '@/actions/authActions';
 import { baseURL } from '@/api/baseURL';
 import { tokenAuth } from '@/tokens/tokenAuth';
 import { tokenRole } from '@/tokens/tokenRole';
@@ -36,44 +37,34 @@ export default function LoginEdit() {
           setIsSubmit(false)
           return;
         }
-    
-        /*  */
         const formData = {
           email: data.email,
           password: data.password,
         } 
-        /*  */
         try{
-          const result = await axios.post(`${baseURL}login`, formData)
-          .then((response) => {
-            if(response.data.status == 0){
-              const message = response.data.message;
+            const res = await loginAction(formData)
+            if(res.status == 0){
+              const message = res.message;
               setErrMsg({email: message });
               setIsSubmit(false);
               toast.warn(message, darkBounce);
               return;
             }
-            if(response.data.status == 2){
-              const message = response.data.message;
-              console.log(message)
+            if(res?.status == 2){
+              const message = res?.message;
               setErrMsg({password: message });
               setIsSubmit(false);
               toast.warn(message, darkBounce);
               return;
             }
-            if(response.data.status == 1) {
-              toast.success(response.data.message, darkBounce);
-              setAuthToken(response.data.auth_token)
-              setRoleToken(response.data.role_level)
+            if(res?.status == 1) {
+              toast.success(res.message, darkBounce);
+              setAuthToken(res?.auth_token)
+              setRoleToken(res?.role_level)
               setIsSubmit(false);    
               router.push('/'); 
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
               return;
             }
-          
-          })
           } catch (error) {
               console.error(`Error: ${error}`);
               setIsSubmit(false); 

@@ -11,6 +11,7 @@ import { Bounce, toast } from "react-toastify";
 import TopNav from "./TopNav";
 import { darkBounce } from "@/utils/roastifyDark";
 import NavigationMain from "./NavigationMain";
+import { logoutAction } from "@/actions/authActions";
 
 
 
@@ -30,19 +31,18 @@ export default function Header() {
     /* LOGOUT */
     async function postLogout() {
         try{
-            const result = await axiosClientAPI.get(`logout`, config)
-            .then((response) => {
+            const res = await logoutAction(getAuthToken())
+            if(res.status == 1){
                 removeAuthToken();
                 removeRoleToken();
-                toast.success(response.data.message, darkBounce);
+                toast.success(res?.message, darkBounce);
                 setIsLogout(false) 
                 router.push(`/login`);
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 2000);
-            })
+            }
+            setIsLogout(false) 
         } catch (error) {
             console.error(`Error: ${error}`)
+            setIsLogout(false) 
         } 
     } 
 

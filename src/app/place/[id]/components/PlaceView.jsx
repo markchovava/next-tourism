@@ -130,6 +130,7 @@ export default function PlaceView({placeData, reviewsData}) {
             if(response.data.status == 1){
                 toast.success(response.data.message, darkBounce)
                 getData();
+                getReview();
 
             }
         })
@@ -143,8 +144,7 @@ export default function PlaceView({placeData, reviewsData}) {
     },[isSubmit]);
 
 
-    console.log('PLACE data');
-    console.log(data);
+
 
     
 
@@ -166,18 +166,27 @@ export default function PlaceView({placeData, reviewsData}) {
             <div className='w-[90%] mx-auto pt-[2rem] flex items-center justify-between'>
                 <h5 className='mb-2'>{data.name}</h5>
                 <div className='text-xl cursor-pointer flex items-center justify-start gap-3'>
-                    { data?.rating?.rate &&
-                    [...Array(5)].map((a, key) => {
-                        const currentIndex = key + 1;
-                        return (
-                            <>
-                                { currentIndex <= data?.rating?.rate
-                                    ? <FaStar className='text-slate-600' />
-                                    : <FaRegStar className='text-slate-600' />
-                                } 
-                            </>
-                        )
-                    })}
+                    { data?.rating?.rate ?
+                    <>
+                    {
+                        data?.rating?.rate != 0 ?
+                            [...Array(5)].map((a, key) => {
+                                const currentIndex = key + 1;
+                                return (
+                                    <>
+                                        { currentIndex <= data?.rating?.rate
+                                            ? <FaStar className='text-slate-600' />
+                                            : <FaRegStar className='text-slate-600' />
+                                        } 
+                                    </>
+                                )
+                            })
+                        :
+                        ''
+                    }
+                    </> 
+                    : ''
+                    }
 
                 </div>
             </div>
@@ -217,9 +226,11 @@ export default function PlaceView({placeData, reviewsData}) {
             </div>
             {/* DESCRIPTION */}
             <div className='mx-auto w-[80%] mb-[2rem] text-xl'>
+                {data.description &&
                 <p className=' mb-[1rem]'>
                     {data.description}
                 </p>
+                }
 
                 {/*  */}
                 <div className="mx-auto w-[100%] grid lg:grid-cols-2 grid-cols-1 gap-8">
@@ -229,18 +240,24 @@ export default function PlaceView({placeData, reviewsData}) {
                             <IoMdContact className="text-[4rem] text-slate-600" />
                         </div>
                         <div className="border-l border-slate-200 px-6 text-xl font-light">
+                            {data?.address &&
                             <p className="mb-3 flex items-center gap-4">
                                 Address:
-                                <span className="text-slate-700 font-normal">{data.address}</span>
+                                <span className="text-slate-700 font-normal">{data?.address}</span>
                             </p>
+                            }
+                            {data?.city?.name &&
                             <p className="mb-3 flex items-center gap-4">
                                 City:
                                 <span className="text-slate-700 font-normal">{data?.city?.name}</span>
                             </p>
+                            }
+                            {data?.province?.name &&
                             <p className="mb-3 flex items-center gap-4">
                                 Province:
-                                <span className="text-slate-700 font-normal">{data.province?.name}</span>
+                                <span className="text-slate-700 font-normal">{data?.province?.name}</span>
                             </p>
+                            }
                         
                         </div>
                     </div>
@@ -250,19 +267,24 @@ export default function PlaceView({placeData, reviewsData}) {
                             <MdDateRange className="text-[4rem] text-slate-600" />
                         </div>
                         <div className="border-l border-slate-200 px-6 text-xl font-light">
+                            {data?.phone &&
                             <p className="mb-3 flex items-center gap-4">
                                 Phone:
-                                <span className="text-slate-700 font-normal">{data.phone}</span>
+                                <span className="text-slate-700 font-normal">{data?.phone}</span>
                             </p>
+                            }
+                            {data?.email && 
                             <p className="mb-3 flex items-center gap-4">
                                 Email:
-                                <span className="text-slate-700 font-normal">{data.email}</span>
+                                <span className="text-slate-700 font-normal">{data?.email}</span>
                             </p>
+                            }
+                            {data?.website &&
                             <p className="mb-3 flex items-center gap-4">
                                 Website:
-                                <span className="text-slate-700 font-normal">{data.website}</span>
+                                <span className="text-slate-700 font-normal">{data?.website}</span>
                             </p>
-                           
+                            }
                         </div>
                     </div> 
                 </div>

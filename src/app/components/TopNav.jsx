@@ -1,9 +1,12 @@
 "use client"
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { IoIosArrowDown } from 'react-icons/io'
 import { MdOutlineClose } from 'react-icons/md'
+import { logoutAction } from '@/actions/authActions'
+import { tokenAuth } from '@/tokens/tokenAuth'
+import { tokenRole } from '@/tokens/tokenRole'
 
 
 
@@ -20,8 +23,36 @@ export default function TopNav() {
         nine: false,
         ten: false,
         eleven: false,
+        twelve: false,
     })
-    const [isToggle, setIsToggle] = useState(false)
+    const [isToggle, setIsToggle] = useState(false);
+    const [isLogout, setIsLogout] = useState(false);
+    const { getAuthToken, removeAuthToken } = tokenAuth();
+    const { removeRoleToken} = tokenRole();
+    
+    /* LOGOUT */
+    async function postLogout() {
+        try{
+            const res = await logoutAction(getAuthToken())
+            if(res.status == 1){
+                removeAuthToken();
+                removeRoleToken();
+                toast.success(res?.message, darkBounce);
+                setIsLogout(false) 
+                router.push(`/login`);
+            }
+            setIsLogout(false) 
+        } catch (error) {
+            console.error(`Error: ${error}`)
+            setIsLogout(false) 
+        } 
+    } 
+
+    useEffect(() => {
+        isLogout == true && postLogout();
+    }, [isLogout])
+
+
   return (
     <>
     <section className='bg__greenBlue text-white'>
@@ -157,6 +188,17 @@ export default function TopNav() {
                         </li>
                     </ul>
                 </li>
+                <li className='relative hover:text-green-100'>
+                    <span 
+                        onClick={() => setIsActive({twelve: !isActive.twelve})} 
+                        className='cursor-pointer flex items-center justify-start gap-1'>
+                        Rating <IoIosArrowDown /></span>
+                    <ul className={`absolute z-100 ${isActive.twelve == true ? 'block' : 'hidden'} drop-shadow-md top-[135%] transition-all ease-in-out duration-150 left-[-0.5rem]  w-[10rem] border border-white bg-gradient-to-br from-green-600 to-blue-700`}>
+                        <li className='w-[100%] hover:bg-gradient-to-br hover:from-blue-700 hover:to-green-600 px-3 py-2'>
+                            <Link href='/admin/rating' className=''>Places Ratings</Link>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <ul className='flex items-center justify-start gap-4'>
                 <li className='relative hover:text-green-100'>
@@ -175,7 +217,8 @@ export default function TopNav() {
                         <Link href='/admin/prodile/password' className=''>Password</Link>
                     </li>
                     <li className='w-[100%] hover:bg-gradient-to-br hover:from-blue-700 hover:to-green-600 px-3 py-2'>
-                        <Link href='/logout' className=''>Logout</Link>
+                        <button onClick={() => setIsLogout(true) } 
+                            className=''>Logout</button>
                     </li>
                 </ul>
             </li>
@@ -315,6 +358,19 @@ export default function TopNav() {
                         <li className='w-[100%] hover:bg-gradient-to-br hover:from-blue-700 hover:to-green-600 text-center px-3 py-2'>
                             <Link href='/admin/guide' className=''>Guide List</Link>
                         </li>
+                    </ul>
+                </li>
+                
+                {/* GUIDE */}
+                <li className='relative w-[100%]'>
+                    <span onClick={() => setIsActive({twelve: !isActive.twelve})} className='w-[100%] py-2 hover:text-green-100 text-center cursor-pointer flex items-center justify-center gap-2'>
+                    Rating <IoIosArrowDown /></span>
+
+                    <ul className={`relative ${isActive.twelve == true ? 'block' : 'hidden'} w-[100vw] drop-shadow-md transition-all ease-in-out duration-150 border border-slate-200 bg-gradient-to-br from-green-700 to-blue-700`}>
+                        <li className='w-[100%] hover:bg-gradient-to-br hover:from-blue-700 hover:to-green-600 text-center px-3 py-2'>
+                            <Link href='/admin/rating' className=''>Places Rating</Link>
+                        </li>
+                       
                     </ul>
                 </li>
                 

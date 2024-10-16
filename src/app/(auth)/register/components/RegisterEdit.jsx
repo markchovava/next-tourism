@@ -1,6 +1,8 @@
 "use client";
 
+import { registerAction } from '@/actions/authActions';
 import { baseURL } from '@/api/baseURL';
+import { darkBounce } from '@/utils/roastifyDark';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -41,51 +43,24 @@ export default function RegisterEdit() {
           setIsSubmit(false)
           return;
         }
-        /*  */
         const formData = {
           email: data.email,
           password: data.password,
-        }
-        //console.log(formData)
-        setIsSubmit(false);   
-        /*  */
+        }  
         try{
-          const result = await axios.post(`${baseURL}register`, formData)
-          .then((response) => {
-            if(response.data.status == 0){
-              const message = response.data.message;
+            const res = await registerAction(formData)
+            if(res?.status == 0){
+              const message = res?.message;
               setErrMsg({email: message });
               setIsSubmit(false);
-              toast.warn(message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
+              toast.warn(message, darkBounce);
               return;
             }
-            if(response.data.status == 1) {
-              toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
+            if(res?.status == 1) {
+              toast.success(res?.message, darkBounce);
               router.push('/login'); 
               setIsSubmit(false);    
             }
-          
-          })
           } catch (error) {
               console.error(`Error: ${error}`);
               setIsSubmit(false); 
