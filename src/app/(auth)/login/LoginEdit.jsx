@@ -2,13 +2,15 @@
 
 import { loginAction } from '@/actions/authActions';
 import { baseURL } from '@/api/baseURL';
+import { cookieAuthClient } from '@/cookies/authCookieClient';
+import { cookieRoleClient } from '@/cookies/roleCookieClient';
 import { tokenAuth } from '@/tokens/tokenAuth';
 import { tokenRole } from '@/tokens/tokenRole';
 import { darkBounce } from '@/utils/roastifyDark';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import { Bounce, toast } from 'react-toastify';
 
@@ -17,8 +19,11 @@ import { Bounce, toast } from 'react-toastify';
 
 export default function LoginEdit() {
     const router = useRouter();
+    const [isPending, startTransition] = useTransition()
     const { setAuthToken } = tokenAuth();
     const { setRoleToken } = tokenRole();
+    const { setAuthCookie } = cookieAuthClient()
+    const { setRoleCookie } = cookieRoleClient();
     const [isSubmit, setIsSubmit] = useState(false);
     const [data, setData] = useState({});
     const [errMsg, setErrMsg] = useState({});
@@ -29,12 +34,10 @@ export default function LoginEdit() {
     async function postData(){
         if(!data.email){
           setErrMsg({email: 'Email is required.'})
-          setIsSubmit(false)
           return;
         }
         if(!data.password){
           setErrMsg({ password: 'Password is required.'})
-          setIsSubmit(false)
           return;
         }
         const formData = {
@@ -43,6 +46,7 @@ export default function LoginEdit() {
         } 
         try{
             const res = await loginAction(formData)
+            startTransition(() => res);
             if(res.status == 0){
               const message = res.message;
               setErrMsg({email: message });
@@ -58,23 +62,22 @@ export default function LoginEdit() {
               return;
             }
             if(res?.status == 1) {
-              toast.success(res.message, darkBounce);
               setAuthToken(res?.auth_token)
-              setRoleToken(res?.role_level)
-              setIsSubmit(false);    
+              setAuthCookie(res?.auth_token)
+              if(res?.role_level) { 
+                setRoleCookie(res?.role_level); 
+                setRoleToken(res?.role_level); 
+              }  
               router.push('/'); 
+              toast.success(res.message, darkBounce);
               return;
             }
           } catch (error) {
               console.error(`Error: ${error}`);
-              setIsSubmit(false); 
         }
     
       }
-    
-    useEffect(() => {
-      isSubmit && postData();
-    }, [isSubmit]);
+
 
 
   return (
@@ -98,48 +101,51 @@ export default function LoginEdit() {
                     <Link href='/register' className='transition-all ease-in-out underline hover:no-underline text-green-600 hover:text-green-700'>
                         Create a new Account</Link>
                 </div>
+                <form action={postData}>
+                  {/* EMAIL */}
+                  <div className='mb-4'>
+                      <p className='font-semibold mb-1'>Email:</p>
+                      <input 
+                          type='text' 
+                          name='email'
+                          value={data?.email}
+                          onChange={handleInput}
+                          placeholder='Enter Email here...'
+                          className='w-[100%] outline-none border border-slate-300 px-4 py-3 rounded-lg' />
+                      {errMsg.email &&
+                        <p className='text-red-600'>
+                          {errMsg.email}</p>
+                      }
+                  </div>
+                  {/* PASSWORD */}
+                  <div className='mb-4'>
+                      <p className='font-semibold mb-1'>Password:</p>
+                      <input 
+                          type='password'
+                          name='password' 
+                          onChange={handleInput}
+                          placeholder='Enter Password here...'
+                          className='w-[100%] outline-none border border-slate-300 px-4 py-3 rounded-lg' />
+                      {errMsg.password &&
+                        <p className='text-red-600'>
+                          {errMsg.password}</p>
+                      }
+                  </div>
 
-                <div className='mb-4'>
-                    <p className='font-semibold mb-1'>Email:</p>
-                    <input 
-                        type='text' 
-                        name='email'
-                        onChange={handleInput}
-                        placeholder='Enter Email here...'
-                        className='w-[100%] outline-none border border-slate-300 px-4 py-3 rounded-lg' />
-                    {errMsg.email &&
-                      <p className='text-red-600'>
-                        {errMsg.email}</p>
-                    }
-                </div>
-                <div className='mb-4'>
-                    <p className='font-semibold mb-1'>Password:</p>
-                    <input 
-                        type='password'
-                        name='password' 
-                        onChange={handleInput}
-                        placeholder='Enter Password here...'
-                        className='w-[100%] outline-none border border-slate-300 px-4 py-3 rounded-lg' />
-                    {errMsg.password &&
-                      <p className='text-red-600'>
-                        {errMsg.password}</p>
-                    }
-                </div>
-
-                {/* BUTTON */}
-                <div className='w-[100%] flex items-center justify-center'>
-                    <button 
-                      onClick={() => setIsSubmit(true)} 
-                      className='flex items-center justify-center gap-3 group text-white duration-200 transition-all ease-in-out text-md rounded-full p-5 w-[20rem] bg-gradient-to-br from-green-600 to-cyan-700 hover:drop-shadow-md hover:bg-gradient-to-br hover:from-cyan-700 hover:to-green-600'>
-                        { isSubmit == true 
-                            ? 'Processing' :
-                            <>
-                                Submit 
-                                <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
-                            </>
-                        }
-                    </button>
-                </div>
+                  {/* BUTTON */}
+                  <div className='w-[100%] flex items-center justify-center'>
+                      <button type='submit'
+                        className='flex items-center justify-center gap-3 group text-white duration-200 transition-all ease-in-out text-md rounded-full p-5 w-[20rem] bg-gradient-to-br from-green-600 to-cyan-700 hover:drop-shadow-md hover:bg-gradient-to-br hover:from-cyan-700 hover:to-green-600'>
+                          { isPending
+                              ? 'Processing' :
+                              <>
+                                  Submit 
+                                  <FaArrowRightLong className='group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
+                              </>
+                          }
+                      </button>
+                  </div>
+                </form>
         
             </section>
         </div>

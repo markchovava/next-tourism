@@ -57,9 +57,10 @@ export default function RegisterEdit() {
               return;
             }
             if(res?.status == 1) {
-              toast.success(res?.message, darkBounce);
               router.push('/login'); 
               setIsSubmit(false);    
+              toast.success(res?.message, darkBounce);
+              return;
             }
           } catch (error) {
               console.error(`Error: ${error}`);
@@ -69,7 +70,7 @@ export default function RegisterEdit() {
       }
     
     useEffect(() => {
-      isSubmit && postData();
+      isSubmit == true && postData();
     }, [isSubmit]);
 
 

@@ -2,9 +2,12 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa6'
 import AppInfoEdit from './components/AppInfoEdit'
+import { appInfoViewApiAction } from '@/actions/appInfoActions';
 
 
-export default function page() {
+export default async function page() {
+  const appInfoData = await appInfoViewApiAction();
+
   return (
     <div>
         {/* Bread Crumbs */}
@@ -38,7 +41,7 @@ export default function page() {
           </div>
         </section>
 
-        <AppInfoEdit />
+        <AppInfoEdit dbData={appInfoData} />
 
     </div>
   )

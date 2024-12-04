@@ -3,10 +3,13 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 
 import AdvertList from './components/AdvertList'
+import { advertListApiAction } from '@/actions/advertActions';
 
 
 
-export default function page() {
+export default async function page() {
+  const advertData = await advertListApiAction();
+
   return (
     <div>
       {/* Bread Crumbs */}
@@ -30,7 +33,7 @@ export default function page() {
     </section>
 
       {/* LIST */}
-      <AdvertList />
+      <AdvertList dbData={advertData} />
          
 
     </div>

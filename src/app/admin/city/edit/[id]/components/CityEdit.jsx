@@ -3,6 +3,7 @@ import axiosClientAPI from "@/api/axiosClientAPI";
 import { baseURL } from "@/api/baseURL";
 import Loader from "@/app/components/Loader";
 import { tokenAuth } from "@/tokens/tokenAuth";
+import { darkBounce } from "@/utils/roastifyDark";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, Bounce } from 'react-toastify';
@@ -65,17 +66,7 @@ export default function CityEdit({ id }) {
           const result = await axiosClientAPI.post(`city/${id}`, formData, config)
           .then((response) => {
               if(response.data.status == 1){
-                toast.success(response.data.message, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
-                    transition: Bounce,
-                });
+                toast.success(response.data.message, darkBounce);
                 router.push(`/admin/city/${id}`);
                 setIsSubmit(false);
               }

@@ -49,6 +49,7 @@ export default function RoleView({ id }) {
     <section className='w-[100%]'>
         <div className='mx-auto w-[90%] pb-[4rem]'>
           {/*  */}
+          {data?.image &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%] font-semibold'>Image:</div>
             <div className='w-[80%]'>
@@ -57,32 +58,43 @@ export default function RoleView({ id }) {
               </div>
             </div>
           </div>
+          }
           {/*  */}
+          {data?.name &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%] font-semibold'>Name:</div>
             <div className='w-[80%]'>{data?.name}</div>
           </div>
+          }
           {/*  */}
+          {data?.priority &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%] font-semibold'>Priority:</div>
             <div className='w-[80%]'>{data?.priority}</div>
           </div>
+          }
           {/*  */}
+          {data?.slug &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%] font-semibold'>Slug:</div>
             <div className='w-[80%]'>{data?.slug}</div>
           </div>
+          }
           {/*  */}
+          {data?.description &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%] font-semibold'>Description:</div>
             <div className='w-[80%]'>{data?.description}</div>
           </div>
+          }
+          {data?.user?.name &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%] font-semibold'>Author:</div>
             <div className='w-[80%]'>
               {data?.user?.name ? data?.user?.name : data?.user?.email }
             </div>
           </div>
+          }
         </div>
     </section>
   )

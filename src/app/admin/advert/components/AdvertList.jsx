@@ -4,41 +4,37 @@ import Loader from '@/app/components/Loader'
 import { tokenAuth } from '@/tokens/tokenAuth'
 import { darkBounce } from '@/utils/roastifyDark'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import { FaEye, FaSearch } from 'react-icons/fa'
 import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6'
 import { MdDeleteForever, MdEdit } from "react-icons/md";
-import { toast, Bounce } from 'react-toastify'
-import { redirect } from 'next/navigation'
+import { toast } from 'react-toastify'
+import { AdminContextState } from '@/contexts/AdminContext'
+import { advertDeleteApiAction, advertListApiAction, advertPaginationApiAction, advertSearchApiAction } from '@/actions/advertActions'
 
 
-export default function AdvertList() {
-    const [data, setData] = useState();
+export default function AdvertList({ dbData }) {
+    const {advertState, advertDispatch} = AdminContextState();
+    useEffect(() => {
+      advertDispatch({type: 'ADD_DATA', payload: {
+        items: dbData?.data,
+        nextURL: dbData?.links?.next,
+        prevURL: dbData?.links?.prev,
+        }
+      });
+    }, []);
+    const [isPending, startTransition] = useTransition();
     const [search, setSearch] = useState('')
-    const [isSearch, setIsSearch] = useState(false)
-    const { getAuthToken } = tokenAuth();
-
-    if(!getAuthToken()) { 
-      redirect('/login');
-      return;
-    }
-    /* PAGINATION */
-    const [nextURL, setNextURL] = useState()
-    const [prevURL, setPrevURL] = useState()
-    const config = {
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getAuthToken()}`
-    }};
     /* PAGINATION DATA */
     async function paginationHandler(url) {
         try{
-        const result = await axiosClientAPI.get(url, config)
-        .then((response) => {
-            setData(response.data.data)
-            setPrevURL(response.data.links.prev)
-            setNextURL(response.data.links.next)
-        })
+        const res = await advertPaginationApiAction(url)
+        advertDispatch({type: 'ADD_DATA', payload: {
+          items: res?.data,
+          nextURL: res?.links?.next,
+          prevURL: res?.links?.prev,
+        }
+        });
         } catch (error) {
         console.error(`Error: ${error}`)
         }     
@@ -46,12 +42,12 @@ export default function AdvertList() {
     /* GET DATA */
     async function getData() {
         try{
-        const result = await axiosClientAPI.get(`advert`, config)
-        .then((response) => {
-            setData(response.data.data)
-            setPrevURL(response.data.links.prev)
-            setNextURL(response.data.links.next)
-        })
+        const result = await advertListApiAction();
+        advertDispatch({type: 'ADD_DATA', payload: {
+          items: res?.data,
+          nextURL: res?.links?.next,
+          prevURL: res?.links?.prev,
+        }});
         } catch (error) {
         console.error(`Error: ${error}`)
         }   
@@ -59,81 +55,69 @@ export default function AdvertList() {
     /* search DATA */
     async function searchData() {
         if(search === ''){
-        getData();
-        setIsSearch(false);
+        await getData();
         return;
         }
         try{
-        const result = await axiosClientAPI.get(`advert?search=${search}`, config)
-        .then((response) => {
-            setData(response.data.data)
-            setPrevURL(response.data.links.prev)
-            setNextURL(response.data.links.next)
-            setIsSearch(false);
-        })
+        const res = await advertSearchApiAction(search);
+        startTransition(() => res);
+        advertDispatch({type: 'ADD_DATA', payload: {
+          items: res?.data,
+          nextURL: res?.links?.next,
+          prevURL: res?.links?.prev,
+        }});
         } catch (error) {
         console.error(`Error: ${error}`)
-        setIsSearch(false);
         }   
     } 
     /* DELETE DATA */
     async function deleteData(id) {
         try{
-        const result = await axiosClientAPI.delete(`advert/${id}`, config)
-        .then((response) => {
-            if(response.data.status == 1) {
-              toast.success(response.data.message, darkBounce);
-              getData();
-            }
-        })
+        const res = await advertDeleteApiAction(id)
+        toast.success(res?.message, darkBounce);
+        await getData();
         } catch (error) {
         console.error(`Error: ${error}`)
         }   
     }   
 
-    useEffect(() => { 
-        getData();
-    }, []);
 
-    useEffect(() => { 
-        isSearch === true && searchData();
-    }, [isSearch]);
+    if(!advertState?.items) { return ( <Loader /> ) }
 
-    if(!data){ return ( <Loader /> ) }
 
   return (
     <div>
       <section className='w-[100%]'>
         <div className='w-[90%] mx-auto flex items-center justify-between pb-[1rem]'>
-          <div className='w-[45%] flex items-center justify-start'>
+          <form action={searchData} className='w-[45%] flex items-center justify-start'>
             <input type='text' 
               value={search}
               onChange={(e) => setSearch(e.target.value)} 
               placeholder='Enter name here...'
               className='w-[85%] h-[3rem] rounded-l-lg p-3 outline-none border border-slate-300' />
             <button 
-              onClick={() => setIsSearch(true)}
+              type='submit'
               className='w-[15%] h-[3rem] border-y border-r rounded-r-lg text-lg border-slate-300 flex items-center justify-center p-3'>
-              {isSearch === true ? 
+              {isPending === true ? 
                   <span className='animate-pulse w-[15px] h-[15px] rounded-full bg-slate-900'></span> 
                 : 
                   <FaSearch />
               }
             </button>
-          </div>
+          </form>
           <div className='flex items-center justify-end gap-6'>
             {/* PAGINATION */}
             <div className='flex items-center justify-end gap-3'>
-              {prevURL && 
+              {advertState?.prevURL && 
                 <button 
-                  onClick={() => paginationHandler(prevURL)}
+                  onClick={() => paginationHandler(advertState?.prevURL)}
                   className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-blue-600'>
                   <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-700' /> 
                     Prev </button>
               }
-              {nextURL && 
+              {advertState?.nextURL && 
                 <button
-                  onClick={() => paginationHandler(nextURL)}
+                  onClick={() => paginationHandler(advertState?.nextURL)}
                   className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-blue-600'>
                     Next <FaArrowRightLong className='text-green-700 group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
                 </button>
@@ -157,8 +141,8 @@ export default function AdvertList() {
       </section>
       {/* TABLE DATA */}
       <section className='w-[100%]'>
-        {data.length > 0 ? 
-          data.map((item, i) => (
+        {advertState?.items?.length > 0 ? 
+          advertState?.items?.map((item, i) => (
             <div key={i} className='w-[90%] text-lg border-x border-b border-slate-300 mx-auto flex items-center justify-start '>
               <div className='w-[25%] border-r border-blue-300 px-3 py-2 flex items-center justify-between gap-2'>
                 <p className=''>{item.name}</p>
@@ -199,16 +183,16 @@ export default function AdvertList() {
       {/* PAGINATION */}
       <section className='w-[100%] mt-[2rem] mb-[4rem]'>
         <div className='mx-auto w-[90%] flex items-center justify-end gap-3'>
-            {prevURL && 
+            {advertState?.prevURL && 
                 <button 
-                  onClick={() => paginationHandler(prevURL)}
+                  onClick={() => paginationHandler(advertState?.prevURL)}
                   className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-green-600 to-blue-700'>
                   <FaArrowLeftLong className='group-hover:-translate-x-2 duration-200 transition-all ease-in-out text-green-700' /> 
                     Prev </button>
             }
-            {nextURL && 
+            {advertState?.nextURL && 
               <button
-                  onClick={() => paginationHandler(nextURL)}
+                  onClick={() => paginationHandler(advertState?.nextURL)}
                   className='group flex items-center justify-center gap-2 text-transparent bg-gradient-to-br bg-clip-text from-gree-400 to-blue-700'>
                     Next <FaArrowRightLong className='text-blue-600 group-hover:translate-x-2 duration-200 transition-all ease-in-out' />
                 </button>

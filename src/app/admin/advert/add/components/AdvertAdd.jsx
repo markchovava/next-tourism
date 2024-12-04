@@ -1,53 +1,48 @@
 "use client"
-
-import axiosClientAPI from "@/api/axiosClientAPI";
-import { tokenAuth } from "@/tokens/tokenAuth";
+import { advertStoreApiAction } from "@/actions/advertActions";
+import { baseURL } from "@/api/baseURL";
 import { darkBounce } from "@/utils/roastifyDark";
-import { redirect, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import {useRouter } from "next/navigation";
+import {useState, useTransition } from "react";
 import { toast } from "react-toastify";
 
 
 export default function AdvertAdd() {
+    const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const [data, setData] = useState();
-    const [image, setImage] = useState({})
+    const [image, setImage] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
-    const { getAuthToken } = tokenAuth();
-    if(!getAuthToken()) { 
-      redirect('/login');
-    }
-    const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${getAuthToken()}`
-    }};
+    const [errMsg, setErrMsg] = useState({});
     const handleInput = (e) => {
         setData({...data, [e.target.name]: e.target.value})
     }
 
     const postData = async () => {
-        const formData = {
-            name: data?.name,
-            priority: data?.priority,
-            slug: data.slug,
-            href: data.href,
-            description: data?.description,
-            priority: data?.priority,
-            portrait: data.portrait,
-            landscape: data.landscape,
-        
-        };
+        if(!data?.name){
+          const message = 'Name is required';
+          setErrMsg({name: message})
+          toast.warn(message, darkBounce);
+          setIsSubmit(false);
+          return;
+        }
+        const formData = new FormData();
+        formData.append('name', data?.name ?? '');
+        formData.append('priority', data?.priority ?? '');
+        formData.append('slug', data?.slug ?? '');
+        formData.append('href', data?.href ?? '');
+        formData.append('description', data?.description ?? '');
+        formData.append('portrait', data?.portrait ?? '');
+        formData.append('landscape', data?.landscape ?? '');
         try{
-          const result = await axiosClientAPI.post(`advert`, formData, config)
-          .then((response) => {
-            if(response.data.status == 1){
-              toast.success(response.data.message, darkBounce);
+          const res = await advertStoreApiAction(formData)
+          startTransition(() => res)
+            if(res.status == 1){
+              toast.success(res.message, darkBounce);
+              setIsSubmit(false);
               router.push(`/admin/advert`);
-              setIsSubmit(false)
             }
-            }
-          );    
+         
           } catch (error) {
               console.error(`Error: ${error}`);
               console.error(`Error Message: ${error.message}`);
@@ -57,16 +52,11 @@ export default function AdvertAdd() {
 
     }
 
-    useEffect(() => {
-        isSubmit === true && postData();
-    }, [isSubmit]);
-
-  
-  
   return (
     <section className='w-[100%]'>
         <div className='mx-auto w-[90%]'>
-            {/*  */}
+          <form action={postData} onSubmit={() => setIsSubmit(true)}>
+            {/* IMAGES */}
             <div className='mb-6 grid lg:grid-cols-2 grid-cols-1'>
               <div className="w-[100%]">
                 <p className='font-semibold mb-2'>Potrait:</p>
@@ -78,7 +68,8 @@ export default function AdvertAdd() {
                   }}
                   className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
                 <div className="lg:h-[13rem] h-[10rem] aspect-[10/7] rounded-xl border border-slater-200 overflow-hidden">
-                  <img src={image.portrait} className="w-[100%] h-[100%] object-cover" />
+                  <img src={image.portrait ? image.portrait : baseURL + 'assets/img/no-img.jpg'} 
+                    className="w-[100%] h-[100%] object-cover" />
                 </div>
               </div>
               {/*  */}
@@ -92,7 +83,8 @@ export default function AdvertAdd() {
                   }}
                   className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
                 <div className="lg:h-[13rem] h-[10rem] aspect-[5/2] rounded-xl border border-slater-200 overflow-hidden">
-                  <img src={image.landscape} className="w-[100%] h-[100%] object-cover" />
+                  <img src={image.landscape ? image.landscape : baseURL + 'assets/img/no-img.jpg'} 
+                    className="w-[100%] h-[100%] object-cover" />
                 </div>
               </div>
             </div>
@@ -105,6 +97,10 @@ export default function AdvertAdd() {
                   onChange={handleInput}
                   placeholder="Enter Name here..."
                   className='w-[100%] rounded-lg outline-none px-4 py-3 border border-slate-300'/>
+                { errMsg?.name &&
+                  <div className="text-sm text-red-500">
+                    {errMsg?.name}</div>
+                }
             </div>
             {/* SLUG */}
             <div className='mb-6'>
@@ -159,14 +155,15 @@ export default function AdvertAdd() {
                     <option value={12}>12</option>
                 </select>
             </div>
-            {/*  */}
+            {/* SUBMIT */}
             <div className='flex items-center justify-center pb-[4rem]'>
                 <button 
-                  onClick={() => setIsSubmit(true)}
+                  type="submit"
                   className='btn__one'>
-                  {isSubmit === true ? 'Processing' : 'Submit'}
+                  {isSubmit ? 'Processing' : 'Submit'}
                 </button>
             </div>
+          </form>
         </div>
     </section>
   )

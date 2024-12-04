@@ -10,6 +10,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { baseURL } from '@/api/baseURL';
+import StarRate from './StarRate';
 
 
 
@@ -37,8 +38,6 @@ export default function CarouselHotels({title, slug, hotelPlaces}) {
                     navigation
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
-                    onSwiper={(swiper) => console.log(swiper)}
-                    onSlideChange={() => console.log('slide change')}
                     className='card' >
                     {data.map((i, key) => (
                         <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
@@ -52,13 +51,14 @@ export default function CarouselHotels({title, slug, hotelPlaces}) {
                                         {i.name}
                                     </p>
                                 </Link>
-                                <p className='mb-2 flex items-center justify-start gap-2'>
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaRegStar />
-                                </p>
+                               {/* STAR */}
+                               {i?.rating?.rate &&
+                                <>
+                                {i?.rating?.rate > 0 &&
+                                    <StarRate dbData={i?.rating} />
+                                }
+                                </>
+                                }
                                 <p>{i.city?.name}</p>
                             </div>
                         </SwiperSlide>      
@@ -98,13 +98,14 @@ export default function CarouselHotels({title, slug, hotelPlaces}) {
                                         {i.name}
                                     </p>
                                 </Link>
-                                <p className='mb-2 flex items-center justify-start gap-2'>
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaRegStar />
-                                </p>
+                                {/* STAR */}
+                                {i?.rating?.rate &&
+                                <>
+                                {i?.rating?.rate > 0 &&
+                                    <StarRate dbData={i?.rating} />
+                                }
+                                </>
+                                }
                                 <p>{i.city?.name}</p>
                             </div>
                         

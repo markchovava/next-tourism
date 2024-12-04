@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useState } from 'react'
 import { FaRegStar, FaStar } from "react-icons/fa6";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
+import StarRate from './StarRate';
 
 
 
@@ -34,13 +35,14 @@ export default function Grid8({title, placesOne}) {
                                         {i.name}
                                     </p>
                                 </Link>
-                                <p className='mb-2 flex items-center justify-start gap-2'>
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaRegStar />
-                                </p>
+                                {/* STAR */}
+                                {i?.rating?.rate &&
+                                <>
+                                {i?.rating?.rate > 0 &&
+                                    <StarRate dbData={i?.rating} />
+                                }
+                                </>
+                                }
                                 <p>{i.city?.name}</p>
                             </div>
                     </div>

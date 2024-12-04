@@ -51,7 +51,9 @@ export default function PlaceView({ id }) {
             <div className='w-[80%] grid grid-cols-3 gap-6'>
             {data?.place_images.map((i, key) => (
                 <div className='w-[100%] aspect-[5/3] rounded-xl overflow-hidden'>
-                  <img src={baseURL + i.image} className='w-[100%] h-[100%] object-cover' />
+                  <img 
+                    src={i.image ? baseURL + i.image : baseURL + 'assets/img/no-img.jpg'} 
+                    className='w-[100%] h-[100%] object-cover' />
                 </div>
             ))}
             </div>
@@ -63,47 +65,63 @@ export default function PlaceView({ id }) {
             <div className='w-[80%] font-semibold'>{data?.name}</div>
           </div>
           {/*  */}
+          {data?.priority && 
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%]'>Priority:</div>
             <div className='w-[80%] font-semibold'>{data?.priority}</div>
           </div>
+          }
           {/*  */}
+          {data?.address &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Address:</div>
             <div className='w-[80%] font-semibold'>{data?.address}</div>
           </div>
+          }
           {/*  */}
+          {data?.phone &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Phone:</div>
             <div className='w-[80%] font-semibold'>{data?.phone}</div>
           </div>
+          }
           {/*  */}
+          {data?.email &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Email:</div>
             <div className='w-[80%] font-semibold'>{data?.email}</div>
           </div>
+          }
           {/*  */}
+          {data?.website &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Website:</div>
             <div className='w-[80%] font-semibold'>{data?.website}</div>
           </div>
+          }
           {/*  */}
+          {data?.description &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Description:</div>
             <div className='w-[80%] font-semibold'>{data?.description}</div>
           </div>
+          }
           {/*  */}
+          {data?.slug &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Slug:</div>
             <div className='w-[80%] font-semibold'>{data?.slug}</div>
           </div>
+          }
           {/*  */}
+          {data?.city?.name &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%] '>City:</div>
             <div className='w-[80%] font-semibold'>
               {data?.city?.name ? data?.city?.name : 'Not yet added.'}
             </div>
           </div>
+          }
           {/*  */}
           {data?.guides?.length > 0 &&
             <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
@@ -131,18 +149,22 @@ export default function PlaceView({ id }) {
             </div>
           }
           {/*  */}
+          {data?.province?.name && 
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%] '>Province:</div>
             <div className='w-[80%] font-semibold'>
               {data?.province?.name ? data?.province?.name : 'Not yet added.'}
             </div>
           </div>
+          }
+          {data?.user?.name &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%] '>Author:</div>
             <div className='w-[80%] font-semibold'>
               {data?.user?.name ? data?.user?.name : data?.user?.email }
             </div>
           </div>
+          }
         </div>
     </section>
   )

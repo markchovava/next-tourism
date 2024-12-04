@@ -1,61 +1,54 @@
 "use client";
-import axiosClientAPI from "@/api/axiosClientAPI";
 import { tokenAuth } from "@/tokens/tokenAuth";
 import { tokenRole } from "@/tokens/tokenRole";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState, useTransition } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import TopNav from "./TopNav";
 import { darkBounce } from "@/utils/roastifyDark";
 import NavigationMain from "./NavigationMain";
 import { logoutAction } from "@/actions/authActions";
+import { cookieAuthClient } from "@/cookies/authCookieClient";
+import { cookieRoleClient } from "@/cookies/roleCookieClient";
 
 
 
 export default function Header() {
     const router = useRouter();
+    const [isPending, startTransition] = useTransition()
     const { getAuthToken, removeAuthToken } = tokenAuth();
+    const { removeAuthCookie } = cookieAuthClient();
+    const { removeRoleCookie } = cookieRoleClient();
     const { removeRoleToken } = tokenRole();
-    const [isLogout, setIsLogout] = useState(false);
-
-    const config = {
-        headers: {
-            "Content-Type": "multipart/form-data",
-            'Authorization': `Bearer ${getAuthToken()}`, 
-        }
-    }
 
     /* LOGOUT */
     async function postLogout() {
         try{
-            const res = await logoutAction(getAuthToken())
+            const res = await logoutAction(getAuthToken());
+            startTransition(() => res);
             if(res.status == 1){
+                /* LOCALSTORAGE */
                 removeAuthToken();
                 removeRoleToken();
-                toast.success(res?.message, darkBounce);
-                setIsLogout(false) 
+                /* COOKIE */
+                removeAuthCookie();
+                removeRoleCookie();
                 router.push(`/login`);
+                toast.success(res?.message, darkBounce);
             }
-            setIsLogout(false) 
         } catch (error) {
             console.error(`Error: ${error}`)
-            setIsLogout(false) 
         } 
     } 
 
-    useEffect(() => {
-        isLogout == true && postLogout();
-    }, [isLogout])
-
-
+   
   return (
     <>
         {/* TOP AREA */}
         {getAuthToken() &&
-            <TopNav />
+            <TopNav postLogout={postLogout} />
         }
         <section className="w-[100%] pt-[2rem] pb-[1rem]">
             <div className="w-[94%] mx-auto flex lg:flex-row flex-col items-center gap-4 justify-start py-4">
@@ -96,9 +89,9 @@ export default function Header() {
                         </ul>
                         {getAuthToken() ? 
                         <button
-                            onClick={() => setIsLogout(true) }
+                            onClick={postLogout}
                             className="transition-all ease-in-out duration-100 rounded-full bg-gradient-to-br from-green-500 to-cyan-800 hover:text-transparent hover:bg-gradient-to-br hover:bg-clip-text hover:from-green-600 hover:to-cyan-700 border border-white hover:border-green-600 px-4 py-3 text-white">
-                            Logout
+                            {isPending ? 'Processing' : 'Logout'}
                         </button>
                         :
                         <Link 

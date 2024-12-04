@@ -15,10 +15,12 @@ export default function Footer({ appInfoData }) {
             <section className='w-[100%] flex lg:flex-row flex-col items-start justify-between gap-5 py-12'>
                 {/* LOGO */}
                 <div className='lg:w-[40%] w-[100%] px-3'>
-                    <h5 className='font-semibold text-[2rem]'>Fortune Shop</h5>
+                    <h5 className='font-extrabold text-[2rem]'>Enjoy
+                        <span className='text-black'>Zimbabwe</span>
+                    </h5>
                     <p>
-                        At {data?.name}, we're passionate about bringing 
-                        high-quality [Product Category] to the people
+                        At Enjoy Zimbabwe, we're passionate about bringing 
+                        high-quality experience to the people.
                     </p>
                     <div className='flex items-center justify-start'>
 

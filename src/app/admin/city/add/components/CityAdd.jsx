@@ -3,6 +3,7 @@
 import axiosClientAPI from "@/api/axiosClientAPI";
 import Loader from "@/app/components/Loader";
 import { tokenAuth } from "@/tokens/tokenAuth";
+import { darkBounce } from "@/utils/roastifyDark";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, Bounce } from "react-toastify";
@@ -47,24 +48,13 @@ export default function CityAdd() {
             image: data.image,
             priority: data?.priority,
         };
-        //console.log(formData);
-        //setIsSubmit(false);
         try{
           const result = await axiosClientAPI.post(`city`, formData, config)
           .then((response) => {
-            toast.success(response.data.message, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-              transition: Bounce,
-            });
             router.push(`/admin/city`);
-              setIsSubmit(false)
+            toast.success(response.data.message, darkBounce);
+            setIsSubmit(false)
+            return
             }
           );    
           } catch (error) {

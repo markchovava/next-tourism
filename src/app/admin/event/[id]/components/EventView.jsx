@@ -21,7 +21,6 @@ export default function EventView({ id }) {
     try{
       const result = await axiosClientAPI.get(`event/${id}`, config)
       .then((response) => {
-        console.log(response.data?.data)
         setData(response.data?.data)
       })
     } catch (error) {
@@ -44,6 +43,7 @@ export default function EventView({ id }) {
     <section className='w-[100%]'>
         <div className='mx-auto w-[90%] pb-[4rem] text-lg'>
           {/*  */}
+          {data?.landscape &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Landscape:</div>
             <div className='w-[80%]'>
@@ -52,7 +52,9 @@ export default function EventView({ id }) {
               </div>
             </div>
           </div>
+          }
           {/*  */}
+          {data?.portrait &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Portrait:</div>
             <div className='w-[80%]'>
@@ -61,17 +63,23 @@ export default function EventView({ id }) {
               </div>
             </div>
           </div>
+          }
           {/*  */}
+          {data?.name && 
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%] '>Name:</div>
             <div className='w-[80%] font-semibold'>{data?.name}</div>
           </div>
+          }
           {/*  */}
+          {data?.description && 
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%] '>Description:</div>
             <div className='w-[80%] font-semibold'>{data?.description}</div>
           </div>
+          }
           {/*  */}
+          {data?.priority &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-4'>
             <div className='w-[20%] '>Priority:</div>
             <div className='w-[80%] font-semibold'>
@@ -79,41 +87,54 @@ export default function EventView({ id }) {
                 {data?.priority}</span>
             </div>
           </div>
+          }
           {/*  */}
+          {data?.date &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Date:</div>
             <div className='w-[80%] font-semibold flex items-center justify-start gap-2'>
               <span>{data?.date ? data?.date : 'Not added.'}</span>
-              <span></span>{data?.time ? data?.time : 'Not added.'}
+              <span>{data?.time ? data?.time : 'Not added.'} </span>
             </div>
           </div>
+          }
           {/*  */}
+          {data?.city?.name &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>City:</div>
             <div className='w-[80%] font-semibold'>{data?.city?.name ? data?.city?.name : 'Not added.'}</div>
           </div>
+          }
           {/*  */}
+          {data?.address &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Address:</div>
             <div className='w-[80%] font-semibold'>{data?.address}</div>
           </div>
+          }
           {/*  */}
+          {data?.phone &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Phone:</div>
             <div className='w-[80%] font-semibold'>{data?.phone}</div>
           </div>
+          }
           {/*  */}
+          {data?.email &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Email:</div>
             <div className='w-[80%] font-semibold'>{data?.email}</div>
           </div>
-         
+          }
+          {/*  */} 
+         {data?.user?.name &&
           <div className='w-[100%] flex items-center justify-start gap-4 mb-6'>
             <div className='w-[20%]'>Author:</div>
             <div className='w-[80%]  font-semibold'>
               {data?.user?.name ? data?.user?.name : data?.user?.email }
             </div>
           </div>
+         }
         </div>
     </section>
   )

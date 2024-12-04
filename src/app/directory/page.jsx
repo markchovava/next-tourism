@@ -12,14 +12,20 @@ import { getGuides } from "@/api/getGuides";
 import CarouselProvince from "../components/CarouselProvince";
 import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa6";
+import SectionAdvert from "../components/SectionAdvert";
+import { getAdvertbyPriority } from "@/api/getAdverts";
 
 
 
 
 export default async function Home() {
-   const [provincesData, citiesData, categoriesOne, placesData, guidesData ] = await Promise.all([ 
-        getProvinces(), getCities(), getCategoriesOne(), 
-        getPlaces(), getGuides(),
+   const [provincesData, 
+    citiesData, categoriesOne, 
+    placesData, guidesData, 
+    advertData ] = await Promise.all([ 
+        getProvinces(), getCities(), 
+        getCategoriesOne(), getPlaces(), 
+        getGuides(), getAdvertbyPriority(3)
     ]);
 
   return (
@@ -41,6 +47,8 @@ export default async function Home() {
     </section>
 
     <CarouselProvince title='Province Listings' dbData={provincesData} />
+
+    <SectionAdvert dbData={advertData} />
 
     <CarouselCategory title='Category Listings' categoriesOne={categoriesOne} />
 

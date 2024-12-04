@@ -2,9 +2,13 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import AdvertView from './components/AdvertView'
+import { advertViewApiAction } from '@/actions/advertActions';
 
 
-export default function page({params: {id} }) {
+export default async function page({params: {id} }) {
+  const advertData = await advertViewApiAction(id);
+
+  
   return (
     <div>
         {/* Bread Crumbs */}
@@ -38,7 +42,7 @@ export default function page({params: {id} }) {
         </section>
 
         {/*  */}
-        <AdvertView id={id} />
+        <AdvertView id={id} dbData={advertData} />
 
 
     </div>

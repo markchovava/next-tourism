@@ -47,7 +47,7 @@ export default function CarouselPlace({title, dbData, slug}) {
                         <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                             <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
                                 <img
-                                    src={i.place_images[0]?.image ? baseURL + i.place_images[0]?.image : ''} 
+                                    src={i.place_images[0]?.image ? baseURL + i?.place_images[0]?.image : ''} 
                                     className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
                                
                             </div>
@@ -59,8 +59,12 @@ export default function CarouselPlace({title, dbData, slug}) {
                                 </Link>
                                 {/* STAR */}
                                 {i?.rating?.rate &&
+                                <>
+                                {i?.rating?.rate > 0 &&
                                     <StarRate dbData={i?.rating} />
-                                    }
+                                }
+                                </>
+                                }
                                 <p>{i.city?.name}</p>
                             </div>
                         </SwiperSlide>      
@@ -100,13 +104,14 @@ export default function CarouselPlace({title, dbData, slug}) {
                                         {i.name} 
                                     </p>
                                 </Link>
-                                <p className='mb-2 flex items-center justify-start gap-2'>
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaStar />
-                                    <FaRegStar />
-                                </p>
+                                {/* STAR */}
+                                {i?.rating?.rate &&
+                                <>
+                                {i?.rating?.rate > 0 &&
+                                    <StarRate dbData={i?.rating} />
+                                }
+                                </>
+                                }
                                 <p>{i.city?.name}</p>
                             </div>
                         

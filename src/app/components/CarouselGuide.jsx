@@ -10,6 +10,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { baseURL } from '@/api/baseURL';
+import Image from 'next/image';
 
 
 
@@ -18,6 +19,9 @@ export default function CarouselGuide({ title, dbData }) {
     const [data, setData] = useState(dbData?.data)
 
     return (
+       
+        <>
+        {data && 
         <section className='w-[100%]'>
             <div className='w-[90%] mx-auto pb-[5rem]'>
                 <section className='hidden lg:block '>
@@ -37,18 +41,21 @@ export default function CarouselGuide({ title, dbData }) {
                         navigation
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
-                        onSwiper={(swiper) => console.log(swiper)}
-                        onSlideChange={() => console.log('slide change')}
                         className='card__transparent' >
                         {data?.map((i, key) => (
                             <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                                 <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                                    <img src={baseURL + i.portrait} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                                    
+                                    <figure className='absolute w-[100%] h-[100%] object-cover zoom__inOut'>
+                                    <Image
+                                        src={i?.portrait && baseURL + i?.portrait} 
+                                        layout="fill"
+                                        objectFit="cover"
+                                        alt="Image" />
+                                    </figure>
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                                     </div>
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                        <Link href={`/category/${i.slug}`} className='link__two'>
+                                        <Link href={`/category/${i?.slug}`} className='link__two'>
                                             {i.name}
                                         </Link>
                                         
@@ -76,18 +83,22 @@ export default function CarouselGuide({ title, dbData }) {
                         navigation
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
-                        onSwiper={(swiper) => console.log(swiper)}
-                        onSlideChange={() => console.log('slide change')}
                         className='card__transparent' >
                         {data.map((i, key) => (
                             <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                                 <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                                    <img src={baseURL + i.portrait} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                                    <figure className='absolute w-[100%] h-[100%] object-cover zoom__inOut'>
+                                    <Image
+                                        src={i?.portrait && baseURL + i?.portrait} 
+                                        layout="fill"
+                                        objectFit="cover"
+                                        alt="Image" />
+                                    </figure>
 
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                                     </div>
                                     <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                        <Link href={`/guide/${i.slug}`} className='link__two'>
+                                        <Link href={`/guide/${i?.slug}`} className='link__two'>
                                             {i.name}
                                         </Link>
                                         
@@ -99,5 +110,8 @@ export default function CarouselGuide({ title, dbData }) {
                 </section>
             </div>
         </section>
+        }
+        </>
+        
     )
 }

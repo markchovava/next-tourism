@@ -12,23 +12,27 @@ import { getEventsByNumber } from "@/api/getEvents";
 import CarouselPlace from "./components/CarouselPlace";
 import { getPlacesByGuideSlug } from "@/api/getPlaceGuides";
 import CarouselProvince from "./components/CarouselProvince";
+import SectionAdvert from "./components/SectionAdvert";
+import { getAdvertbyPriority } from "@/api/getAdverts";
 
 
 
 
 export default async function Home() {
    const [eventsByNumber, citiesOne, categoriesOne, placeNationalHeritage, placeSpecialActivities,
-          placesEntertainment, placeEatSleep, provinces] = await Promise.all([ 
+          placesEntertainment, placeEatSleep, provinces, advertData1, advertData2 ] = await Promise.all([ 
           getEventsByNumber(4), getCitiesOne(), getCategoriesOne(), 
           getPlacesByGuideSlug('national-heritage'), getPlacesByGuideSlug('special-activities'),
           getPlacesByGuideSlug('entertainment'), getPlacesByGuideSlug('where-to-eat-and-sleep'), 
-          getProvinces()
+          getProvinces(), getAdvertbyPriority(1), getAdvertbyPriority(2)
     ]);
 
   return (
    <div>
 
     <SliderMain eventsByNumber={eventsByNumber} />
+    {/* Advert */}
+    <SectionAdvert dbData={advertData1} />
     {/*  */}
     <CarouselPlace dbData={placeNationalHeritage} title={'National Heritage'} slug={'national-heritage'} />
     {/*  */}
@@ -43,6 +47,10 @@ export default async function Home() {
     <CarouselCity title='Top Cities' dbData={citiesOne} />
     
     <CarouselCategory title='Top Categories' categoriesOne={categoriesOne} />
+
+
+    {/* Advert */}
+    <SectionAdvert dbData={advertData2} />
 
 
 

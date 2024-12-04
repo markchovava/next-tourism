@@ -2,12 +2,13 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import AdvertEdit from './components/AdvertEdit'
+import { advertViewApiAction } from '@/actions/advertActions';
 
 
 
 
 export default async function page({ params: {id} }) {
-  
+  const advertData = await advertViewApiAction(id);
   return (
     <div>
         {/* Bread Crumbs */}
@@ -39,7 +40,7 @@ export default async function page({ params: {id} }) {
         </section>
 
         {/* DELIVERY ADD */}
-        <AdvertEdit id={id}/>
+        <AdvertEdit id={id} dbData={advertData} />
 
 
     </div>

@@ -1,8 +1,10 @@
 "use client"
 
 import axiosClientAPI from "@/api/axiosClientAPI";
+import { baseURL } from "@/api/baseURL";
 import Loader from "@/app/components/Loader";
 import { tokenAuth } from "@/tokens/tokenAuth";
+import { darkBounce } from "@/utils/roastifyDark";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast, Bounce } from "react-toastify";
@@ -56,13 +58,11 @@ export default function PlaceAdd() {
     const postData = async () => {
       if(!data.city_id){
         setErrMsg({city_id: 'City is required.'})
-        console.log('City')
         setIsSubmit(false)
         return;
       }
       if(!data.province_id){
         setErrMsg({province_id: 'Province is required.'})
-        console.log('Province')
         setIsSubmit(false)
         return;
       }  
@@ -82,17 +82,7 @@ export default function PlaceAdd() {
       try{
           const result = await axiosClientAPI.post(`place`, formData, config)
           .then((response) => {
-            toast.success(response.data.message, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-              transition: Bounce,
-            });
+            toast.success(response.data.message, darkBounce);
             router.push(`/admin/place`);
               setIsSubmit(false)
             }
@@ -123,7 +113,7 @@ export default function PlaceAdd() {
           <div className='mx-auto w-[90%]'>
               {/*  */}
               <div className='mb-6'>
-                <div className="grid grid-cols-4 gap-8">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
                   {/* COL */}
                   <div className="w-[100%]">
                     <p className='font-semibold mb-2'>Image:</p>
@@ -134,9 +124,9 @@ export default function PlaceAdd() {
                         setImgItem([...imgItem, e.target.files[0]])
                       }}
                       placeholder="Enter name here..."
-                      className='w-[100%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
-                    <div className="w-[100%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
-                      <img src={image.img1} className="w-[100%] h-[100%] object-cover" />
+                      className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
+                    <div className="w-[70%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
+                      <img src={image?.img1 ? image?.img1 : baseURL + 'assets/img/no-img.jpg'} className="w-[100%] h-[100%] object-cover" />
                     </div>
                   </div>
                   {/* COL */}
@@ -149,9 +139,9 @@ export default function PlaceAdd() {
                         setImgItem([...imgItem, e.target.files[0]])
                       }}
                       placeholder="Enter name here..."
-                      className='w-[100%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
-                    <div className="w-[100%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
-                      <img src={image.img2} className="w-[100%] h-[100%] object-cover" />
+                      className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
+                    <div className="w-[70%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
+                      <img src={image?.img2 ? image?.img2 : baseURL + 'assets/img/no-img.jpg'} className="w-[100%] h-[100%] object-cover" />
                     </div>
                   </div>
                   {/* COL */}
@@ -164,9 +154,10 @@ export default function PlaceAdd() {
                         setImgItem([...imgItem, e.target.files[0]])
                       }}
                       placeholder="Enter name here..."
-                      className='w-[100%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
-                    <div className="w-[100%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
-                      <img src={image.img3} className="w-[100%] h-[100%] object-cover" />
+                      className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
+                    <div className="w-[70%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
+                      <img src={image?.img3 ? image?.img3 : baseURL + 'assets/img/no-img.jpg'} 
+                        className="w-[100%] h-[100%] object-cover" />
                     </div>
                   </div>
                   {/* COL */}
@@ -179,24 +170,10 @@ export default function PlaceAdd() {
                         setImgItem([...imgItem, e.target.files[0]])
                       }}
                       placeholder="Enter name here..."
-                      className='w-[100%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
-                    <div className="w-[100%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
-                      <img src={image.img4} className="w-[100%] h-[100%] object-cover" />
-                    </div>
-                  </div>
-                  {/* COL */}
-                  <div className="w-[100%]">
-                    <p className='font-semibold mb-2'>Image:</p>
-                    <input type='file'
-                      name="img5"
-                      onChange={(e) => {
-                        setImage({...image, img5: URL.createObjectURL(e.target.files[0])})
-                        setImgItem([...imgItem, e.target.files[0]])
-                      }}
-                      placeholder="Enter name here..."
-                      className='w-[100%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
-                    <div className="w-[100%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
-                      <img src={image.img5} className="w-[100%] h-[100%] object-cover" />
+                      className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
+                    <div className="w-[70%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
+                      <img src={image?.img4 ? image?.img4 : baseURL + 'assets/img/no-img.jpg'} 
+                        className="w-[100%] h-[100%] object-cover" />
                     </div>
                   </div>
                 </div>
@@ -219,26 +196,9 @@ export default function PlaceAdd() {
                     placeholder="Enter Priority here..."
                     className='w-[100%] rounded-lg outline-none px-4 py-3 border border-slate-300'>
                       <option value=''>Select an option.</option>
-                      <option value={1}>1</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5</option>
-                      <option value={6}>6</option>
-                      <option value={7}>7</option>
-                      <option value={8}>8</option>
-                      <option value={9}>9</option>
-                      <option value={10}>10</option>
-                      <option value={11}>11</option>
-                      <option value={12}>12</option>
-                      <option value={13}>13</option>
-                      <option value={14}>14</option>
-                      <option value={15}>15</option>
-                      <option value={16}>16</option>
-                      <option value={17}>17</option>
-                      <option value={18}>18</option>
-                      <option value={19}>19</option>
-                      <option value={20}>20</option>
+                      {[...Array(12)].map((i, key) => (
+                        <option value={key+1}>{key+1}</option>
+                      ))}
                   </select>
               </div>
               {/*  */}
