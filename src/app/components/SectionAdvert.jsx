@@ -11,12 +11,15 @@ export default function SectionAdvert({ dbData }) {
     <>
     {data &&
     <section className='w-[100%] mb-[4rem]'>
-        <div className='w-[90%] relative mx-auto cursor-pointer bg-slate-100 overflow-hidden rounded-xl drop-shadow-lg'>
-        <Image 
-            src={baseURL + data?.landscape} 
-            layout="fill"
-            objectFit="cover"
-            alt="Image" />
+        <div className='w-[90%] relative mx-auto '>
+        <figure className='aspect-[5/1] w-[100%] cursor-pointer bg-slate-100 overflow-hidden rounded-xl drop-shadow-lg'>
+          <Image 
+              src={data?.landscape ? baseURL + data?.landscape : baseURL + 'assets/img/no-img.jpg'} 
+              layout="fill"
+              objectFit="cover"
+              alt="Image" />
+
+        </figure>
         </div>
     </section>
     }

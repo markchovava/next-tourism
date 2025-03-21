@@ -46,7 +46,7 @@ export default function CarouselCategory({ title, categoriesOne }) {
                                 <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
                                     <figure className='absolute w-[100%] h-[100%] object-cover zoom__inOut'>
                                     <Image 
-                                        src={i?.image && baseURL + i?.image} 
+                                        src={i?.image ? baseURL + i?.image : baseURL + 'assets/img/no-img.jpg'} 
                                         layout="fill"
                                         objectFit="cover"
                                         alt={i.name} />
@@ -88,7 +88,7 @@ export default function CarouselCategory({ title, categoriesOne }) {
                                 <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
                                     <figure className='absolute w-[100%] h-[100%] object-cover zoom__inOut'>
                                     <Image
-                                        src={i?.image && baseURL + i?.image} 
+                                        src={i?.image ? baseURL + i?.image : baseURL + 'assets/img/no-img.jpg'} 
                                         layout="fill"
                                         objectFit="cover"
                                         alt={i.name} />

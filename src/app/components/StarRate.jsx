@@ -14,10 +14,16 @@ export default function StarRate({ dbData }) {
                 const currentIndex = key + 1;
                 return (
                     <>
-                        { currentIndex <= data.rate
-                            ? <FaStar className='text-slate-600' />
-                            : <FaRegStar className='text-slate-600' />
-                        } 
+                        {data.rate == 0 ?
+                        <FaRegStar className='text-slate-600' />
+                        :
+                        <>
+                            { currentIndex <= data.rate
+                                ? <FaStar className='text-slate-600' />
+                                : <FaRegStar className='text-slate-600' />
+                            } 
+                        </>
+                        }
                     </>
                 )
             })}

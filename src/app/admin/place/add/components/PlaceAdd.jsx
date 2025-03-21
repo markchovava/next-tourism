@@ -1,5 +1,6 @@
 "use client"
 
+import { placeStoreApiAction } from "@/actions/placeActions";
 import axiosClientAPI from "@/api/axiosClientAPI";
 import { baseURL } from "@/api/baseURL";
 import Loader from "@/app/components/Loader";
@@ -11,19 +12,19 @@ import { toast, Bounce } from "react-toastify";
 
 
 
-export default function PlaceAdd() {
+export default function PlaceAdd({cityData, provinceData}) {
+  console.log(cityData)
+  console.log(provinceData)
   const router = useRouter();
     const [data, setData] = useState({});
     const [imgItem, setImgItem] = useState([]);
     const [image, setImage] = useState({})
     const [errMsg, setErrMsg] = useState({});
-    const [provinces, setProvinces] = useState();
-    const [cities, setCities] = useState();
+    const [provinces, setProvinces] = useState(provinceData?.data ?? []);
+    const [cities, setCities] = useState(cityData?.data ?? []);
     const [isSubmit, setIsSubmit] = useState(false);
     const { getAuthToken } = tokenAuth();
-    if(!getAuthToken()) { 
-      redirect('/login');
-    }
+   
     const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -32,28 +33,7 @@ export default function PlaceAdd() {
     const handleInput = (e) => {
         setData({...data, [e.target.name]: e.target.value})
     }
-    /* GET */
-    async function getProvinces() {
-      try{
-        const result = await axiosClientAPI.get(`province-all/`, config)
-        .then((response) => {
-          setProvinces(response.data.data)
-        })
-      } catch (error) {
-        console.error(`Error: ${error}`)
-      }   
-    }    
-    /* GET */
-    async function getCities() {
-      try{
-        const result = await axiosClientAPI.get(`city-all/`, config)
-        .then((response) => {
-          setCities(response.data.data)
-        })
-      } catch (error) {
-        console.error(`Error: ${error}`)
-      }   
-    }    
+   
 
     const postData = async () => {
       if(!data.city_id){
@@ -66,44 +46,37 @@ export default function PlaceAdd() {
         setIsSubmit(false)
         return;
       }  
-      const formData = {
-          priority: data?.priority,
-          city_id: data?.city_id,
-          province_id: Number(data?.province_id),
-          name: data?.name,
-          slug: data?.slug,
-          description: data?.description,
-          phone: data?.phone,
-          address: data?.address,
-          email: data?.email,
-          website: data?.website,
-          place_images: imgItem,
-      };
+      const formData = new FormData();
+      formData.append('priority', data?.priority ?? '');
+      formData.append('city_id', data?.city_id ?? '');
+      formData.append('province_id', data?.province_id ?? '');
+      formData.append('name', data?.name ?? '');
+      formData.append('slug', data?.slug ?? '');
+      formData.append('description', data?.description ?? '');
+      formData.append('phone', data?.phone ?? '');
+      formData.append('address', data?.address ?? '');
+      formData.append('email', data?.email ?? '');
+      formData.append('website', data?.website ?? '');
+      for (let i = 0; i < imgItem.length; i++) {
+        formData.append('place_images[]', imgItem[i]);
+      }
       try{
-          const result = await axiosClientAPI.post(`place`, formData, config)
-          .then((response) => {
-            toast.success(response.data.message, darkBounce);
-            router.push(`/admin/place`);
+          const res = await placeStoreApiAction(formData);
+            if(res?.status == 1){
+              toast.success(res?.message, darkBounce);
+              router.push(`/admin/place`);
               setIsSubmit(false)
             }
-          );    
+            toast.success(res?.message, darkBounce);
+            setIsSubmit(false)
           } catch (error) {
               console.error(`Error: ${error}`);
-              console.error(`Error Message: ${error.message}`);
-              console.error(`Error Response: ${error.response}`);
+              console.error(`Error Message: ${error?.message}`);
+              console.error(`Error Response: ${error?.response}`);
               setIsSubmit(false);
           } 
-
     }
 
-    useEffect(() => { 
-      getCities()
-      getProvinces(); 
-    }, []);
-
-    useEffect(() => {
-        isSubmit === true && postData();
-    }, [isSubmit]);
 
     if(!provinces && !cities){ return ( <Loader /> ) }
   
@@ -111,10 +84,11 @@ export default function PlaceAdd() {
   return (
     <section className='w-[100%]'>
           <div className='mx-auto w-[90%]'>
-              {/*  */}
+            <form action={postData} onSubmit={() => setIsSubmit(true)}>
+              {/* IMAGES */}
               <div className='mb-6'>
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
-                  {/* COL */}
+                  {/* IMAGE COL */}
                   <div className="w-[100%]">
                     <p className='font-semibold mb-2'>Image:</p>
                     <input type='file'
@@ -129,7 +103,7 @@ export default function PlaceAdd() {
                       <img src={image?.img1 ? image?.img1 : baseURL + 'assets/img/no-img.jpg'} className="w-[100%] h-[100%] object-cover" />
                     </div>
                   </div>
-                  {/* COL */}
+                  {/* IMAGE COL */}
                   <div className="w-[100%]">
                     <p className='font-semibold mb-2'>Image:</p>
                     <input type='file'
@@ -144,41 +118,9 @@ export default function PlaceAdd() {
                       <img src={image?.img2 ? image?.img2 : baseURL + 'assets/img/no-img.jpg'} className="w-[100%] h-[100%] object-cover" />
                     </div>
                   </div>
-                  {/* COL */}
-                  <div className="w-[100%]">
-                    <p className='font-semibold mb-2'>Image:</p>
-                    <input type='file'
-                      name="img3"
-                      onChange={(e) => {
-                        setImage({...image, img3: URL.createObjectURL(e.target.files[0])})
-                        setImgItem([...imgItem, e.target.files[0]])
-                      }}
-                      placeholder="Enter name here..."
-                      className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
-                    <div className="w-[70%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
-                      <img src={image?.img3 ? image?.img3 : baseURL + 'assets/img/no-img.jpg'} 
-                        className="w-[100%] h-[100%] object-cover" />
-                    </div>
-                  </div>
-                  {/* COL */}
-                  <div className="w-[100%]">
-                    <p className='font-semibold mb-2'>Image:</p>
-                    <input type='file'
-                      name="img4"
-                      onChange={(e) => {
-                        setImage({...image, img4: URL.createObjectURL(e.target.files[0])})
-                        setImgItem([...imgItem, e.target.files[0]])
-                      }}
-                      placeholder="Enter name here..."
-                      className='w-[70%] rounded-lg outline-none mb-3 px-4 py-3 border border-slate-300'/>
-                    <div className="w-[70%] aspect-[5/3] rounded-xl border border-slater-200 overflow-hidden">
-                      <img src={image?.img4 ? image?.img4 : baseURL + 'assets/img/no-img.jpg'} 
-                        className="w-[100%] h-[100%] object-cover" />
-                    </div>
-                  </div>
                 </div>
               </div>
-              {/*  */}
+              {/* NAME */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Name</p>
                   <input type='text'
@@ -201,7 +143,7 @@ export default function PlaceAdd() {
                       ))}
                   </select>
               </div>
-              {/*  */}
+              {/* ADDRESS */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Address:</p>
                   <input type='text'
@@ -210,7 +152,7 @@ export default function PlaceAdd() {
                     placeholder="Enter name here..."
                     className='w-[100%] rounded-lg outline-none px-4 py-3 border border-slate-300'/>
               </div>
-              {/*  */}
+              {/* EMAIL */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Email:</p>
                   <input type='text'
@@ -219,7 +161,7 @@ export default function PlaceAdd() {
                     placeholder="Enter Email here..."
                     className='w-[100%] rounded-lg outline-none px-4 py-3 border border-slate-300'/>
               </div>
-              {/*  */}
+              {/* SLUG */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Slug:</p>
                   <input type='text'
@@ -228,7 +170,7 @@ export default function PlaceAdd() {
                     placeholder="Enter name here..."
                     className='w-[100%] rounded-lg outline-none px-4 py-3 border border-slate-300'/>
               </div>
-              {/*  */}
+              {/* DESCRIPTION */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Description:</p>
                   <textarea
@@ -237,7 +179,7 @@ export default function PlaceAdd() {
                     placeholder="Enter Description here..."
                     className='w-[100%] h-[7rem] rounded-lg outline-none px-4 py-3 border border-slate-300'></textarea>
               </div>
-              {/*  */}
+              {/* PHONE */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Phone:</p>
                   <input type='text'
@@ -246,7 +188,7 @@ export default function PlaceAdd() {
                     placeholder="Enter Slug here..."
                     className='w-[100%] rounded-lg outline-none px-4 py-3 border border-slate-300'/>
               </div>
-              {/*  */}
+              {/* WEBSITE */}
               <div className='mb-6'>
                   <p className='font-semibold mb-2'>Website:</p>
                   <input type='text'
@@ -255,7 +197,7 @@ export default function PlaceAdd() {
                     placeholder="Enter Website here..."
                     className='w-[100%] rounded-lg outline-none px-4 py-3 border border-slate-300'/>
               </div>
-              {/*  */}
+              {/* CITY */}
               { cities &&
                 <div className='mb-6'>
                     <p className='font-semibold mb-2'>City:</p>
@@ -274,6 +216,7 @@ export default function PlaceAdd() {
                       }
                 </div>
               }
+              {/* PROVINCE */}
               { provinces &&
                 <div className='mb-6'>
                     <p className='font-semibold mb-2'>Province:</p>
@@ -292,15 +235,15 @@ export default function PlaceAdd() {
                       }
                 </div>
               }
-              
-              
+              {/* BUTTON */}
               <div className='flex items-center justify-center pb-[4rem]'>
                   <button 
-                    onClick={() => setIsSubmit(true)}
+                    type='submit'
                     className='btn__one'>
-                    {isSubmit === true ? 'Processing' : 'Submit'}
+                    {isSubmit ? 'Processing' : 'Submit'}
                   </button>
               </div>
+            </form>
           </div>
       </section>
   )

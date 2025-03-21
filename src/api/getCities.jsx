@@ -35,6 +35,7 @@ export async function getCityBySlug(slug) {
     }
     return await response.json()
 }
+
 export async function getCityPlaces(slug) {
     const response = await fetch(`${baseURL}city-places?slug=${slug}`, { cache: 'no-store'})
     if(!response.ok) {

@@ -3,10 +3,13 @@ import React from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 
 import PlaceList from './components/PlaceList'
+import { placeListApiAction } from '@/actions/placeActions'
 
 
 
-export default function page() {
+export default async function page() {
+  const placeData = await placeListApiAction();
+
   return (
     <div>
       {/* Bread Crumbs */}
@@ -30,7 +33,7 @@ export default function page() {
     </section>
 
       {/* LIST */}
-      <PlaceList />
+      <PlaceList dbData={placeData} />
          
 
     </div>

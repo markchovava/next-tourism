@@ -20,7 +20,7 @@ export default function GuideList({ guidesData }) {
     /* PAGINATION DATA */
     async function paginationHandler(url) {
         try{
-        const result = await axios.get(url, config)
+        const result = await axios.get(url)
         .then((response) => {
             setData(response.data.data)
             setPrevURL(response.data.links.prev)
@@ -132,12 +132,16 @@ export default function GuideList({ guidesData }) {
                     {/* COL */}
                     {data.map((i, key) => (
                         <div key={key} className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                            <img src={baseURL + i.portrait} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                            
+                            <img 
+                            src={i?.portrait ? baseURL + i?.portrait : baseURL + 'assets/img/no-img.jpg'} 
+                            className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
                             
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opaguide-75 text-white'>
                             </div>
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                <Link href={`/guide-place/${i.slug}`} className='link__two'>
+                                <Link href={`/guide-place/${i.slug}`} 
+                                className='link__two leading-tight'>
                                     {i.name} 
                                 </Link>
                                 

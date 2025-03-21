@@ -193,17 +193,17 @@ export default function PlaceView({placeData, reviewsData}) {
         </section>
         <section className='w-[100%] mb-[5rem]'>
             {/* IMAGE AREA */}
-            <div className='w-[90%] mx-auto grid lg:grid-cols-4 grid-cols-2 gap-4 mb-[2rem]'>
-                <div className='w-[100%] h-[100%] col-span-2 row-span-2 rounded-lg aspect-[10/7] overflow-hidden bg-green-200'>
+            <div className='w-[90%] mx-auto grid lg:grid-cols-4 grid-cols-2 gap-5 mb-[2rem]'>
+                <div className='w-[100%] h-[100%] col-span-3 row-span-2 rounded-lg aspect-[2/1] overflow-hidden bg-slate-100 drop-shadow-lg'>
                     <img 
-                        src={baseURL + isActive.image } 
+                        src={isActive?.image ? baseURL + isActive?.image : baseURL + 'assets/img/no-img.jpg'} 
                         className='w-[100%] h-[100%] object-cover transition-all duration-200 ease-in-out' />
                 </div>
-                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-blue-200 overflow-hidden'>
+                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-slate-100 overflow-hidden drop-shadow-lg'>
                     {data?.place_images[0]?.image ? 
                     <img 
-                        onClick={() => setIsActive({image: data.place_images[0].image})}
-                        src={baseURL + data.place_images[0].image} 
+                        onClick={() => setIsActive({image: data?.place_images[0]?.image})}
+                        src={data?.place_images[0]?.image ? baseURL + data?.place_images[0]?.image : baseURL + 'assets/img/no-img.jpg'} 
                         className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
                     : 
                     <img 
@@ -212,37 +212,11 @@ export default function PlaceView({placeData, reviewsData}) {
                         className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
                     }
                 </div>
-                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-orange-200 overflow-hidden'>
+                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-slate-100 overflow-hidden drop-shadow-lg'>
                     {data?.place_images[1]?.image ? 
                     <img 
                         onClick={() => setIsActive({image: data.place_images[1].image})}
-                        src={baseURL + data.place_images[1].image} 
-                        className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
-                    : 
-                    <img 
-                        onClick={() => setIsActive({image: 'assets/img/no-img.jpg'})}
-                        src={baseURL + 'assets/img/no-img.jpg'} 
-                        className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
-                    }
-                </div>
-                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-pink-200 overflow-hidden'>                    
-                    {data?.place_images[2]?.image ? 
-                    <img 
-                        onClick={() => setIsActive({image: data.place_images[2].image})}
-                        src={baseURL + data.place_images[2].image} 
-                        className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
-                    : 
-                    <img 
-                        onClick={() => setIsActive({image: 'assets/img/no-img.jpg'})}
-                        src={baseURL + 'assets/img/no-img.jpg'} 
-                        className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
-                    }
-                </div>
-                <div className='w-[100%] h-[100%] rounded-lg aspect-[10/7] bg-green-200 overflow-hidden'>
-                    {data?.place_images[3]?.image ? 
-                    <img 
-                        onClick={() => setIsActive({image: data.place_images[3].image})}
-                        src={baseURL + data.place_images[3].image} 
+                        src={data?.place_images[1]?.image ? baseURL + data?.place_images[1]?.image : baseURL + 'assets/img/no-img.jpg'} 
                         className='w-[100%] h-[100%] hover:scale-110 object-cover transition-all duration-200 ease-in-out' />
                     : 
                     <img 

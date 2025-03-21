@@ -73,48 +73,37 @@ export default function ProvinceCities({ cities, province, slug }) {
 
   return (
     <div>
-      {/* Bread Crumbs */}
-      <section className='w-[100%]'>
-            <div className='mx-auto w-[90%] border-b border-slate-200'>
-                <ul className='flex items-center justify-start gap-2 py-2'>
-                    <li><Link href='/'>Home</Link></li>
-                    <li><FaAngleRight /></li>
-                    <li><Link href='/province'>Province</Link></li>                 
-                    <li><FaAngleRight /></li>
-                    <li><Link href='/province'>{province.data?.name}</Link></li>                 
-                </ul>
-            </div>
-      </section>
+  
       {/*  */}
-      <section className='w-[100%]'>
-            <div className='mx-auto w-[90%] flex items-center justify-center flex-col pt-[10rem] pb-[5rem]'>
-                <h6>Find a City to visit {province?.data?.name}.</h6>
-                <div className="w-[80%] mx-auto border border-slate-300 rounded-full overflow-hidden flex items-center justify-start">
-                    <input 
-                        type="text" 
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="w-[90%] outline-none px-5 py-4 border-r border-slate-200" 
-                        placeholder="Search City by name..." />
-                   
-                   <button 
-                        onClick={() => setIsSearch(true)}
-                        className="w-[10%] h-[100%] border-none outline-none flex items-center justify-center text-center">
-                        {isSearch === true 
-                        ?
-                            <IoIosSearch className="text-2xl animate-pulse text-green-700 drop-shadow-md"/>
-                        :
-                            <IoIosSearch className="text-2xl transition-all duration-300 ease-in-out hover:text-green-800 hover:drop-shadow-md"/>
-                        }
-                    </button>
-            
-                </div>
-            </div>
+      <section className='w-[100%] pb-[4rem]'>
+        <div className='mx-auto w-[90%] flex items-center justify-center flex-col pt-[10rem]'>
+          <h6>Find a City to visit {province?.data?.name}.</h6>
+          <div className="w-[80%] mx-auto border border-slate-300 rounded-full overflow-hidden flex items-center justify-start">
+              <input 
+                  type="text" 
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-[90%] outline-none px-5 py-4 border-r border-slate-200" 
+                  placeholder="Search City by name..." />
+              
+              <button 
+                  onClick={() => setIsSearch(true)}
+                  className="w-[10%] h-[100%] border-none outline-none flex items-center justify-center text-center">
+                  {isSearch === true 
+                  ?
+                      <IoIosSearch className="text-2xl animate-pulse text-green-700 drop-shadow-md"/>
+                  :
+                      <IoIosSearch className="text-2xl transition-all duration-300 ease-in-out hover:text-green-800 hover:drop-shadow-md"/>
+                  }
+              </button>
+      
+          </div>
+        </div>
       </section>
 
         {/*  */}
-        <section className='w-[100%]'>
-            <div className='w-[90%] mx-auto pb-[5rem]'>
+        <section className='w-[100%] pb-[4rem]'>
+            <div className='w-[90%] mx-auto'>
                 <div className='w-[100%] flex items-center justify-between pb-3'>
                     <h6 className="text-[2.5rem] font-semibold">
                         Cities
@@ -145,12 +134,13 @@ export default function ProvinceCities({ cities, province, slug }) {
                     {/* COL */}
                     {data.map((i, key) => (
                         <div key={key} className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                            <img src={baseURL + i.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                            <img src={i?.image ? baseURL + i?.image : baseURL + 'assets/img/no-img.jpg'} 
+                              className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
                             
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opacity-75 text-white'>
                             </div>
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] text-white text-[2rem] font-bold flex items-end px-3 pb-4'>
-                                <Link href={`/city/${i.slug}`} className='link__two'>
+                                <Link href={`/city/${i?.slug}`} className='link__two'>
                                     {i.name} 
                                 </Link>
                             </div>

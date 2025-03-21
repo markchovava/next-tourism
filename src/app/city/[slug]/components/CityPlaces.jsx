@@ -21,6 +21,7 @@ export default function CityPlaces({slug, city, places }) {
         try{
         const result = await axios.get(url)
         .then((response) => {
+            console.log('response', response.data)
             setData(response.data.data)
             setPrevURL(response.data.links.prev)
             setNextURL(response.data.links.next)
@@ -88,7 +89,7 @@ export default function CityPlaces({slug, city, places }) {
         {/*  */}
         <section className='w-[100%]'>
             <div className='mx-auto w-[90%] flex items-center justify-center flex-col pt-[10rem] pb-[5rem]'>
-                <h6>Find your a place to visit.</h6>
+                <h6>Find your place to visit.</h6>
                 <div className="w-[80%] mx-auto border border-slate-300 rounded-full overflow-hidden flex items-center justify-start">
                     <input 
                         type="text" 
@@ -146,11 +147,8 @@ export default function CityPlaces({slug, city, places }) {
                     {data.map((i, key) => (
                         <div key={key} className='group'>
                             <div className='relative w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-2'>
-                                <img src={baseURL + i?.place_images[0]?.image} className='w-[100%] h-[100%] object-cover zoom__inOut' />
-                                <span className='heart__icon'>
-                                    <FaRegHeart  />
-                                    <FaHeart />
-                                </span>
+                                <img src={i?.place_images[0]?.image ? baseURL + i?.place_images[0]?.image : baseURL + 'assets/img/no-img.jpg' } 
+                                className='w-[100%] h-[100%] object-cover zoom__inOut' />
                             </div>
                                 <div className='pb-2 px-4'>
                                 <Link href={`/place/${i.id}`}>

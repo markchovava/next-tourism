@@ -39,7 +39,8 @@ export default function MainCarousel({ provinces }) {
             {data.map((i, key) => (
             <SwiperSlide key={key} className='h-[60vh] aspect-[10/7] overflow-hidden hover:drop-shadow-md'>
                 <div className='group w-[100%] h-[100%] relative'>
-                  <img src={baseURL + i.image} className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
+                  <img src={i.image ? baseURL + i.image : baseURL + 'assets/img/no-img.jpg'} 
+                    className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
                   <div className='absolute z-30 w-[100%] h-[50%] bottom-0 left-0 bg-gradient-to-b from-transparent to-black opacity-75 group-hover:opacity-25 transition-all ease-in-out duration-200'>
                   </div>
                   <div className='absolute z-40 bottom-0 left-0 p-8 text-white drop-shadow-md'>
@@ -65,13 +66,12 @@ export default function MainCarousel({ provinces }) {
              navigation
              pagination={{ clickable: true }}
              scrollbar={{ draggable: true }}
-             onSwiper={(swiper) => console.log(swiper)}
-             onSlideChange={() => console.log('slide change')}
              className='h-[70vh]'>
             {data.map((i, key) => (
             <SwiperSlide key={key} className='h-[60vh] aspect-[10/7] overflow-hidden hover:drop-shadow-md'>
                 <div className='group w-[100%] h-[100%] relative'>
-                  <img src={baseURL + i.image} className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
+                  <img src={i?.image ? baseURL + i?.image : baseURL + 'assets/img/no-img.jpg'} 
+                    className='w-[100%] transition-all ease-in-out duration-200 group-hover:scale-110 h-[100%] object-cover absolute z-30' alt='Image' />
                   <div className='absolute z-30 w-[100%] h-[50%] bottom-0 left-0 bg-gradient-to-b from-transparent to-black opacity-75 group-hover:opacity-25 transition-all ease-in-out duration-200'>
                   </div>
                   <div className='absolute z-40 bottom-0 left-0 p-8 text-white drop-shadow-md'>

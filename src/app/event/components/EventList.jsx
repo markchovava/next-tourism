@@ -142,7 +142,8 @@ export default function EventList({ eventsData }) {
                     {/* COL */}
                     {data.map((i, key) => (
                         <div key={key} className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                            <img src={baseURL + i.portrait} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                            <img src={i?.portrait ? baseURL + i?.portrait : baseURL + 'assets/img/no-img.jpg'} 
+                                className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
                            
                             <div className='absolute bottom-0 left-0 w-[100%] h-[50%] bg-gradient-to-b from-transparent to-black opaevent-75 text-white'>
                             </div>

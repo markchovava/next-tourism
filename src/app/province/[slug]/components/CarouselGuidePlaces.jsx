@@ -5,19 +5,16 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Pagination, Navigation, Coverflow, Scrollbar, A11y} from 'swiper/modules';
-import { FaRegStar, FaStar } from "react-icons/fa6";
 import { useState } from 'react';
 import Link from 'next/link';
-import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { baseURL } from '@/api/baseURL';
-import StarRate from './StarRate';
 import Image from 'next/image';
 
 
-
-
-export default function CarouselPlace({title, dbData, slug}) {
-    const [data, setData] = useState(dbData.data);
+export default function CarouselGuidePlaces({guide_slug, title, dbData}) {
+    //console.log(title + ' Places:', dbData)
+    const slug = guide_slug;
+    const [data, setData] = useState(dbData?.data)
 
     if(!data.length > 0){return '';}
 
@@ -91,8 +88,6 @@ export default function CarouselPlace({title, dbData, slug}) {
                         navigation
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
-                        onSwiper={(swiper) => console.log(swiper)}
-                        onSlideChange={() => console.log('slide change')}
                         className='card' >
                         {data.map((i, key) => (
                             <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
@@ -129,4 +124,7 @@ export default function CarouselPlace({title, dbData, slug}) {
             </div>
         </section>
     )
+
 }
+
+

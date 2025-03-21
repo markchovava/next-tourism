@@ -36,7 +36,8 @@ export default function EventView({id, eventData}) {
         <section className="w-[100%]">
             <div className="mx-auto w-[90%] pb-[5rem]">
                 <div className="w-[100%] lg:aspect-[5/2] aspect-[5/3] overflow-hidden rounded-xl">
-                    <img src={baseURL + data.landscape} alt={data?.name} className="w-[100%] h-[100%] object-cover" />
+                    <img src={data?.landscape ? baseURL + data?.landscape : baseURL + 'assets/img/no-img.jpg'} 
+                        alt={data?.name} className="w-[100%] h-[100%] object-cover" />
                 </div>
                 {/*  */}
                 <div className="mx-auto w-[80%] pt-[2rem] pb-[3rem] text-xl">

@@ -8,38 +8,12 @@ import React, { useEffect, useState } from 'react'
 
 
 
-export default function PlaceView({ id }) {
-  const [data, setData] = useState();
-  const { getAuthToken } = tokenAuth();
-  if(!getAuthToken()) { 
-    redirect('/login');
-  }
-  const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getAuthToken()}`
-  }};
+export default function PlaceView({ id, dbData }) {
+  const [data, setData] = useState(dbData?.data);
 
-  /* GET DATA */
-  async function getData() {
-    try{
-      const result = await axiosClientAPI.get(`place/${id}`, config)
-      .then((response) => {
-        setData(response.data?.data)
-      })
-    } catch (error) {
-      console.error(`Error: ${error}`)
-    }   
-  }  
-
-  useEffect(() => {
-    getData()
-  }, []);
 
   if(!data){ return ( <Loader /> ) }
 
-  console.log('PLACE');
-  console.log(data);
 
   return (
     <section className='w-[100%] text-lg'>
@@ -52,7 +26,7 @@ export default function PlaceView({ id }) {
             {data?.place_images.map((i, key) => (
                 <div className='w-[100%] aspect-[5/3] rounded-xl overflow-hidden'>
                   <img 
-                    src={i.image ? baseURL + i.image : baseURL + 'assets/img/no-img.jpg'} 
+                    src={i?.image ? baseURL + i?.image : baseURL + 'assets/img/no-img.jpg'} 
                     className='w-[100%] h-[100%] object-cover' />
                 </div>
             ))}
@@ -129,7 +103,9 @@ export default function PlaceView({ id }) {
               <div className='w-[80%] font-semibold'>
                 {data?.guides?.map((i, key) => (
                   <>
-                    <span key={key} className='italic text-blue-700 font-semibold'>{i.name}, </span>
+                    <span key={key} className='italic text-blue-700 font-semibold'>
+                      {key+1 < data?.guides?.length ? i?.name + ', ' : i?.name} 
+                    </span>
                   </>
                 ))}
               </div>
@@ -142,7 +118,7 @@ export default function PlaceView({ id }) {
               <div className='w-[80%] font-semibold'>
                 {data?.categories.map((i, key) => (
                   <>
-                    <span key={key} className='italic text-green-700 font-semibold'>{i.name}, </span>
+                    <span key={key} className='italic text-green-700 font-semibold'>{key+1 < data?.categories.length ? i?.name + ', ' : i?.name} </span>
                   </>
                 ))}
               </div>

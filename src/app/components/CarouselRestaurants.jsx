@@ -44,7 +44,8 @@ export default function CarouselRestaurants({title, restaurantPlaces, slug}) {
                     {data.map((i, key) => (
                         <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                             <div className='relative group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3'>
-                                <img src={baseURL + i.place_images[0]?.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                                <img src={i?.place_images[0]?.image ? baseURL + i?.place_images[0]?.image : baseURL + 'assets/img/no-img.jpg'} 
+                                    className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
                                 
                             </div>
                             <div className='pb-2 px-4'>
@@ -87,8 +88,9 @@ export default function CarouselRestaurants({title, restaurantPlaces, slug}) {
                     {data.map((i, key) => (
                         <SwiperSlide key={key} className=' bg-white overflow-hidden hover:drop-shadow-md'>
                             <div className='group w-[100%] rounded-lg overflow-hidden aspect-[5/4] bg-slate-400 mb-3 relative'>
-                                <img src={baseURL + i.place_images[0]?.image} className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
-                                <FaRegHeart className='absolute z-40 right-[10%] top-[10%]' />
+                                <img src={i?.place_images[0]?.image ? baseURL + i?.place_images[0]?.image : baseURL + 'assets/img/no-img.jpg'} 
+                                    className='absolute w-[100%] h-[100%] object-cover zoom__inOut' />
+                                
                             </div>
                             <div className='pb-2 px-4'>
                                 <Link href={`/place/${i.id}`}>

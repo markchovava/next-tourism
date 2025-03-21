@@ -2,9 +2,12 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import PlaceView from './components/PlaceView'
+import { placeViewApiAction } from '@/actions/placeActions'
 
 
-export default function page({params: {id} }) {
+export default async function page({params: {id} }) {
+  const placeData = await placeViewApiAction(id);
+
   return (
     <div>
         {/* Bread Crumbs */}
@@ -28,7 +31,6 @@ export default function page({params: {id} }) {
           </div>
         </section>
 
-
         {/* BUTTON */}
         <section className='w-[100%]'>
           <div className='mx-auto w-[90%] flex items-center justify-end mb-8'>
@@ -40,10 +42,8 @@ export default function page({params: {id} }) {
           </div>
         </section>
 
-
         {/* DELIVERY */}
-        <PlaceView id={id} />
-
+        <PlaceView id={id} dbData={placeData} />
 
     </div>
   )

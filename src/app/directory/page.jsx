@@ -19,10 +19,10 @@ import { getAdvertbyPriority } from "@/api/getAdverts";
 
 
 export default async function Home() {
-   const [provincesData, 
-    citiesData, categoriesOne, 
-    placesData, guidesData, 
-    advertData ] = await Promise.all([ 
+   const [
+    provincesData, citiesData, 
+    categoriesOne, placesData, 
+    guidesData, advertData ] = await Promise.all([ 
         getProvinces(), getCities(), 
         getCategoriesOne(), getPlaces(), 
         getGuides(), getAdvertbyPriority(3)

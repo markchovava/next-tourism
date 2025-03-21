@@ -2,10 +2,14 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import PlaceAdd from './components/PlaceAdd'
+import { cityListAllApiAction } from '@/actions/cityActions';
+import { provinceListAllApiAction } from '@/actions/provinceActions';
 
 
 
-export default function page() {
+export default async function page() {
+  const [cityData, provinceData] = await Promise.all([cityListAllApiAction(), provinceListAllApiAction()]);
+
   return (
     <div>
         {/* Bread Crumbs */}
@@ -29,7 +33,6 @@ export default function page() {
           </div>
         </section>
 
-
          {/* BUTTON */}
          <section className='w-[100%]'>
           <div className='mx-auto w-[90%] flex items-center justify-end mb-8'>
@@ -39,9 +42,8 @@ export default function page() {
           </div>
         </section>
 
-
         {/* ADD */}
-        <PlaceAdd />
+        <PlaceAdd cityData={cityData} provinceData={provinceData} />
 
 
     </div>

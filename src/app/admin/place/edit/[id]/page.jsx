@@ -2,10 +2,16 @@ import Link from 'next/link'
 import React from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import PlaceEdit from './components/PlaceEdit'
+import { placeViewApiAction } from '@/actions/placeActions';
+import { cityListAllApiAction } from '@/actions/cityActions';
+import { provinceListAllApiAction } from '@/actions/provinceActions';
 
 
 
-export default function page({ params: {id} }) {
+export default async function page({ params: {id} }) {
+  const [placeData, cityData, provinceData] = await Promise.all([placeViewApiAction(id), cityListAllApiAction(), provinceListAllApiAction()]);
+
+
   return (
     <div>
         {/* Bread Crumbs */}
@@ -38,8 +44,8 @@ export default function page({ params: {id} }) {
           </div>
         </section>
 
-        {/* DELIVERY ADD */}
-        <PlaceEdit id={id} />
+        {/* CHILD */}
+        <PlaceEdit id={id} placeData={placeData} cityData={cityData} provinceData={provinceData} />
 
 
     </div>
